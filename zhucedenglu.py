@@ -8,7 +8,7 @@ CORS(app)  # 启用 CORS，允许所有来源的请求
 # MySQL数据库配置
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '1234'
+app.config['MYSQL_PASSWORD'] = '2365975900lbz'
 app.config['MYSQL_DB'] = 'photo_management'
 
 mysql = MySQL(app)

@@ -1,6 +1,7 @@
 <script setup>
   import { useRouter } from 'vue-router';
   import { reactive, onMounted } from 'vue';
+  import axios from 'axios';
 
   const props = defineProps({});
 

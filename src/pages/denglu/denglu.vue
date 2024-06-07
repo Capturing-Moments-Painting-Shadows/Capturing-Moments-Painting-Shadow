@@ -1,6 +1,7 @@
 <script setup>
   import { useRouter } from 'vue-router';
   import { reactive, onMounted } from 'vue';
+  import axios from 'axios';
 
   const props = defineProps({});
 
@@ -249,7 +250,7 @@
   }
   .text-wrapper_3 {
     margin-right: 0.13rem;
-    padding: 1.01rem 0 1.12rem;
+    padding: 0.98rem 0 1.09rem;
     background-color: #800080;
     border-radius: 0.75rem;
     width: 26.5rem;
