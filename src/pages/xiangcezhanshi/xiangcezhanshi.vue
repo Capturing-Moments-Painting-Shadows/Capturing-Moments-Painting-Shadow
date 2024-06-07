@@ -1,0 +1,254 @@
+<script setup>
+  import { useRouter } from 'vue-router';
+  import { reactive, onMounted } from 'vue';
+
+  const props = defineProps({});
+
+  const data = reactive({});
+
+  const router = useRouter();
+
+  function onClick() {
+    router.push({ name: 'zhuye' });
+  }
+
+  function onClick_1() {
+    router.push({ name: 'denglu' });
+  }
+
+  function onClick_2() {
+    router.push({ name: 'leibiechuangjian' });
+  }
+
+  function onClick_3() {
+    router.push({ name: 'zhaopianshangchuan' });
+  }
+
+  function onClick_4() {
+    router.push({ name: 'Page_group_tuxiangshengcheng' });
+  }
+
+  function onClick_5() {
+    router.push({ name: 'zhaopianzhanshi' });
+  }
+
+  function onClick_6() {
+    router.push({ name: 'zhaopianzhanshi' });
+  }
+
+  function onClick_7() {
+    router.push({ name: 'zhaopianzhanshi' });
+  }
+
+  function onClick_8() {
+    router.push({ name: 'zhaopianzhanshi' });
+  }
+
+  function onClick_9() {
+    router.push({ name: 'zhaopianzhanshi' });
+  }
+
+  function onClick_10() {
+    router.push({ name: 'zhaopianzhanshi' });
+  }
+</script>
+
+<template>
+  <div class="flex-col page">
+    <div class="flex-row justify-between items-center header">
+      <div class="flex-row items-center">
+        <div class="flex-col justify-start text-wrapper"><span class="text">凝时绘影</span></div>
+        <div class="flex-row group_1 ml-40-5">
+          <span class="font" @click="onClick">主页</span>
+          <div class="flex-row shrink-0 group_6 ml-31-5">
+            <span class="font text_2" @click="onClick_1">登录注册</span>
+            <span class="font text_3 ml-26" @click="onClick_2">类别创建</span>
+            <span class="font ml-26" @click="onClick_3">照片上传</span>
+            <span class="font text_4 ml-26" @click="onClick_4">图像生成</span>
+            <span class="font text_5 ml-26">相册展示</span>
+          </div>
+        </div>
+      </div>
+      <span class="text_6">未登录</span>
+    </div>
+    <div class="flex-col group section">
+      <div class="flex-col section_2">
+        <span class="self-center text_7">相册展示</span>
+        <span class="self-center text_8">这里展示了我们最新的相册作品。</span>
+        <div class="flex-row self-stretch group_2">
+          <img
+            class="image"
+            src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=9859a8235a614cd9fca4ded2cb33ae1e.png"
+          />
+          <img
+            class="image ml-13-5"
+            src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=9f5c087ce21f2c8cb52379d16e5ba492.png"
+          />
+          <img
+            class="image ml-13-5"
+            src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=f69deb37630219993941c51ce007a5f6.png"
+          />
+        </div>
+        <div class="flex-row justify-between self-stretch section_3 view">
+          <span class="font_2" @click="onClick_5">相册1</span>
+          <span class="font_2" @click="onClick_6">相册2</span>
+          <span class="font_2" @click="onClick_7">相册3</span>
+        </div>
+        <div class="flex-row self-stretch group_3">
+          <img
+            class="image"
+            src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=9859a8235a614cd9fca4ded2cb33ae1e.png"
+          />
+          <img
+            class="image ml-13-5"
+            src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=9f5c087ce21f2c8cb52379d16e5ba492.png"
+          />
+          <img
+            class="image ml-13-5"
+            src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=f69deb37630219993941c51ce007a5f6.png"
+          />
+        </div>
+      </div>
+      <div class="flex-col section">
+        <div class="flex-col justify-start tabs-header">
+          <div class="flex-row justify-between section_3 view_2">
+            <span class="font_2" @click="onClick_8">相册4</span>
+            <span class="font_2" @click="onClick_9">相册5</span>
+            <span class="font_2" @click="onClick_10">相册6</span>
+          </div>
+        </div>
+        <div class="group section_4"></div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="css">
+  .ml-40-5 {
+    margin-left: 2.53rem;
+  }
+  .ml-31-5 {
+    margin-left: 1.97rem;
+  }
+  .ml-13-5 {
+    margin-left: 0.84rem;
+  }
+  .page {
+    background-color: #000000;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+  }
+  .header {
+    padding: 0.5rem 2.5rem 0.5rem;
+    background-color: #121212;
+    overflow: hidden;
+  }
+  .text-wrapper {
+    padding: 0.23rem 0 0.36rem;
+    border-radius: 0.19rem;
+    height: 1.25rem;
+  }
+  .text {
+    color: #ffffff;
+    font-size: 0.69rem;
+    font-family: Kalam;
+    font-weight: 700;
+    line-height: 0.65rem;
+  }
+  .group_1 {
+    width: 19.8rem;
+  }
+  .font {
+    font-size: 0.5rem;
+    font-family: HarmonyOSSansSC;
+    line-height: 0.47rem;
+    color: #ffffff;
+  }
+  .group_6 {
+    width: 16.83rem;
+  }
+  .text_2 {
+    line-height: 0.47rem;
+  }
+  .text_3 {
+    line-height: 0.47rem;
+  }
+  .text_4 {
+    line-height: 0.47rem;
+  }
+  .text_5 {
+    line-height: 0.46rem;
+  }
+  .text_6 {
+    margin-right: 0.7rem;
+    color: #fcfcfc;
+    font-size: 0.63rem;
+    font-family: IdeaFonts MeiLingTi;
+    line-height: 0.56rem;
+  }
+  .group {
+    flex-grow: 1;
+  }
+  .section {
+    width: 100%;
+  }
+  .section_2 {
+    padding: 2.67rem 2.44rem 0;
+    background-color: #121212;
+    overflow: hidden;
+  }
+  .text_7 {
+    color: #ffffff;
+    font-size: 1.75rem;
+    font-family: HarmonyOSSansSC;
+    font-weight: 700;
+    line-height: 1.63rem;
+  }
+  .text_8 {
+    margin-top: 1.16rem;
+    color: #ffffff;
+    font-size: 0.56rem;
+    font-family: HarmonyOSSansSC;
+    line-height: 0.53rem;
+  }
+  .group_2 {
+    margin-top: 2.05rem;
+  }
+  .image {
+    flex: 1 1 12.78rem;
+    border-radius: 0.25rem;
+    height: 9.41rem;
+  }
+  .section_3 {
+    padding: 0.9rem 5.05rem 0.97rem 5.1rem;
+    background-color: #383838;
+    overflow: hidden;
+  }
+  .view {
+    margin-top: 1.86rem;
+  }
+  .font_2 {
+    font-size: 0.75rem;
+    font-family: IdeaFonts MeiLingTi;
+    line-height: 0.66rem;
+    color: #ffffff;
+  }
+  .group_3 {
+    padding: 1.86rem 0 1.91rem;
+  }
+  .tabs-header {
+    background-color: #121212;
+    overflow: hidden;
+  }
+  .view_2 {
+    margin-left: 2.44rem;
+    margin-right: 2.44rem;
+  }
+  .section_4 {
+    background-color: #121212;
+    overflow: hidden;
+    width: 100%;
+  }
+</style>
