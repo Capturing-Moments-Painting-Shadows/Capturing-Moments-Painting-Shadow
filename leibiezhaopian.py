@@ -157,6 +157,30 @@ def get_album():
 def serve_image(filename):
     return send_from_directory('static/upload', filename)
 
+@app.route('/show_photos', methods=['GET'])
+def get_photos():
+    categories_id = request.args.get('categoryId')
+    user_id = request.args.get('userId')
+
+    if not categories_id or not user_id:
+        return jsonify({"error": "用户登录和类别状态未保存"}), 400
+
+    cursor = mysql.connection.cursor()
+
+    query = """
+        SELECT p.id, p.title, p.file_path 
+        FROM photos p
+        JOIN categories c ON p.category_id = c.id
+        WHERE p.category_id = %s AND c.user_id = %s
+    """
+    cursor.execute(query, (categories_id, user_id))
+    photos = cursor.fetchall()
+    # print(photos)
+    cursor.close()
+
+    return jsonify(photos)
+
+
 if __name__ == '__main__':
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
         os.makedirs(app.config['UPLOAD_FOLDER'])
