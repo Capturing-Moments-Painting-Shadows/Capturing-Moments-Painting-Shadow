@@ -50,7 +50,7 @@ def get_categories():
     categories = cur.fetchall()
     cur.close()
 
-    print(categories)
+    # print(categories)
 
     categories_list = [{'id': category['id'], 'name': category['name']} for category in categories]
 
@@ -68,19 +68,21 @@ def upload_photos():
 
     # try:
     title = request.form['title']
-    category_id = request.form['category_id']
+    category_id = request.form['category_name']
     photo = request.files['file']
     
+    print(category_id)
+
     if not photo:
         return jsonify({'error': '文件不存在'}), 400
 
     # 获取类别ID
     cur = mysql.connection.cursor()
-    cur.execute("SELECT id,name FROM categories WHERE user_id = %s", (userid,))
+    cur.execute("SELECT name FROM categories WHERE id = %s AND user_id = %s", (category_id, userid,))
     category = cur.fetchone()
 
     category_name = category['name']
-    print(category_name)
+    print(category)
 
     if not category:
         return jsonify({'message': '该类别未创建'}), 400
@@ -91,12 +93,20 @@ def upload_photos():
     file_path = os.path.join(current_dir, username, category_name)
     if not os.path.exists(file_path):
         os.makedirs(file_path)
+    
+    # 获取文件扩展名
+    file_extension = os.path.splitext(photo.filename)[1]
+    # 拼装新文件名
+    new_filename = f"{username}_{category_name}_{title}{file_extension}"
+    # 保存文件到指定目录
+    save_path = os.path.join(file_path, new_filename)
+    print(save_path)
 
     # 保存文件
-    photo.save(file_path)
+    photo.save(save_path)
 
     cur.execute("INSERT INTO photos (title, category_id, file_path) VALUES (%s, %s, %s)", 
-                (title, category_id, file_path))
+                (title, category_id, save_path))
     mysql.connection.commit()
     cur.close()
     

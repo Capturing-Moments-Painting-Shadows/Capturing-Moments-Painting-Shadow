@@ -49,7 +49,7 @@
   async function uploadPhoto() {
     const formData = new FormData();
     formData.append('title', data.title);
-    formData.append('category_id', selectedCategory.value);
+    formData.append('category_name', selectedCategory.value);
     formData.append('file', data.file);
 
     try {
@@ -59,7 +59,7 @@
         }
       });
       if (response && response.data) {
-        if (response.status === 201) {
+        if (response.status === 200) {
           alert('上传成功！');
         } else {
           console.error('Unexpected response format:', response);
