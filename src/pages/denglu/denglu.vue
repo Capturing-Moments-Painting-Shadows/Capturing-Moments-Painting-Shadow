@@ -212,11 +212,8 @@
     width: 45rem;
   }
   .text_12 {
-    color: #ffffff;
-    font-size: 3.5rem;
-    font-family: HarmonyOSSansSC;
-    font-weight: 700;
-    line-height: 3.29rem;
+    margin-left: 0.8rem;
+    line-height: 0.92rem;
   }
   .font_2 {
     font-size: 1.13rem;

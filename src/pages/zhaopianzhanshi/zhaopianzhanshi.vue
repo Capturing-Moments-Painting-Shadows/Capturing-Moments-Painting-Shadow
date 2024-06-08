@@ -75,45 +75,53 @@
       </div>
       <span class="text_6">未登录</span>
     </div>
-    <div class="flex-col section section_2">
+    <div class="flex-col group section">
+      <div class="flex-col section_2">
       <span class="self-center text_7">风景照</span>
-      <div class="flex-row self-stretch group">
+      <span class="self-center text_8">这个相册中存放的是风景照</span>
+      <div class="flex-row self-stretch group_2">
         <img
           class="image"
           src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=205486bd998e43e336e6f6b0c5266bd6.png"
         />
         <img
-          class="image ml-13-5"
+          class="image"
           src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=5020e0204f7a54681d0b5a73b036045f.png"
         />
         <img
-          class="image ml-13-5"
+          class="image"
           src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=b64d74a4134b3de75e1a8b5340aa4e1e.png"
         />
       </div>
-      <div class="flex-row justify-between self-stretch section_3 view">
+      <div class="flex-row justify-between align-center self-stretch section_3 view">
         <span class="font_2" @click="onClick_6">照片1</span>
         <span class="font_2" @click="onClick_7">照片2</span>
         <span class="font_2" @click="onClick_8">照片3</span>
       </div>
-      <div class="flex-row self-stretch group_2">
+      <div class="flex-row self-stretch group_3">
         <img
           class="image"
           src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=ad80034784574a70778c94cd92579325.png"
         />
         <img
-          class="image ml-13-5"
+          class="image "
           src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=aab6b567d1adcf40741b20ae0fd1d639.png"
         />
         <img
-          class="image ml-13-5"
+          class="image "
           src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=b1925c4f57210a7d7c22a85d3594b113.png"
         />
       </div>
-      <div class="flex-row justify-between self-stretch section_3">
-        <span class="font_2" @click="onClick_9">照片4</span>
-        <span class="font_2" @click="onClick_10">照片5</span>
-        <span class="font_2" @click="onClick_11">照片6</span>
+      </div>
+      <div class="flex-col section">
+        <div class="flex-col justify-start tabs-header">
+          <div class="flex-row justify-between section_3 view_2">
+            <span class="font_2" @click="onClick_9">照片4</span>
+            <span class="font_2" @click="onClick_10">照片5</span>
+            <span class="font_2" @click="onClick_11">照片6</span>
+          </div>
+        </div>
+        <div class="group section_4"></div>
       </div>
     </div>
   </div>
@@ -121,13 +129,13 @@
 
 <style scoped lang="css">
   .ml-40-5 {
-    margin-left: 2.53rem;
+    margin-left: 5.06rem;
   }
   .ml-31-5 {
-    margin-left: 1.97rem;
+    margin-left: 3.94rem;
   }
   .ml-13-5 {
-    margin-left: 0.84rem;
+    margin-left: 16.8rem;
   }
   .page {
     background-color: #000000;
@@ -137,79 +145,97 @@
     height: 100%;
   }
   .header {
-    padding: 0.5rem 2.5rem 0.5rem;
+    padding: 1rem 5rem 0.91rem;
     background-color: #121212;
     overflow: hidden;
   }
   .text-wrapper {
-    padding: 0.23rem 0 0.36rem;
-    border-radius: 0.19rem;
-    height: 1.25rem;
+    padding: 0.47rem 0 0.72rem;
+    border-radius: 0.38rem;
+    height: 2.5rem;
   }
   .text {
+    margin-left: 0.22rem;
+    margin-right: 0.21rem;
     color: #ffffff;
-    font-size: 0.69rem;
+    font-size: 1.38rem;
     font-family: Kalam;
     font-weight: 700;
-    line-height: 0.65rem;
+    line-height: 1.31rem;
   }
   .group_1 {
     width: 19.8rem;
   }
   .font {
-    font-size: 0.5rem;
+    font-size: 1rem;
     font-family: HarmonyOSSansSC;
-    line-height: 0.47rem;
+    line-height: 0.94rem;
     color: #ffffff;
   }
   .group_5 {
     width: 16.83rem;
   }
   .text_2 {
-    line-height: 0.47rem;
+    line-height: 0.94rem;
   }
   .text_3 {
-    line-height: 0.47rem;
+    line-height: 0.94rem;
   }
   .text_4 {
-    line-height: 0.47rem;
+    line-height: 0.94rem;
   }
   .text_5 {
-    line-height: 0.46rem;
+    line-height: 0.93rem;
   }
   .text_6 {
-    margin-right: 0.7rem;
+    margin-right: 1.39rem;
     color: #fcfcfc;
-    font-size: 0.63rem;
+    font-size: 1.25rem;
     font-family: IdeaFonts MeiLingTi;
-    line-height: 0.56rem;
+    line-height: 1.11rem;
   }
   .section {
-    flex-grow: 1;
+    width: 100%;
   }
   .section_2 {
-    padding: 2.71rem 2.44rem 4.22rem;
+    padding: 2.67rem 2.44rem 0;
     background-color: #121212;
     overflow: hidden;
-    width: 100%;
   }
   .text_7 {
     color: #ffffff;
-    font-size: 1.75rem;
+    font-size: 3.5rem;
     font-family: HarmonyOSSansSC;
     font-weight: 700;
-    line-height: 1.59rem;
+    line-height: 3.34rem;
   }
-  .group {
-    margin-top: 2.13rem;
+  .text_8 {
+    margin-top: 3rem;
+    color: #ffffff;
+    font-size: 1rem;
+    font-family: kaiti;
+    line-height: 1rem;
+  }
+  .self-center {
+    align-self: center;
+  }
+  .self-stretch {
+    align-self: stretch;
+  }
+  
+  .group_2 {
+    margin-top: 3rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
   .image {
-    flex: 1 1 12.78rem;
-    border-radius: 0.25rem;
-    height: 9.41rem;
+    border-radius: 2rem;
+    height: 20rem;
+    margin-bottom: 0.84rem;
   }
   .section_3 {
-    padding: 0.9rem 5.04rem 0.96rem 5.12rem;
+    padding: 2rem 10rem 2rem 10rem;
     background-color: #383838;
     overflow: hidden;
   }
@@ -217,12 +243,34 @@
     margin-top: 1.86rem;
   }
   .font_2 {
-    font-size: 0.75rem;
-    font-family: IdeaFonts MeiLingTi;
-    line-height: 0.66rem;
+    font-size: 1.5rem;
+    font-family: kaiti;
+ 
     color: #ffffff;
   }
-  .group_2 {
-    padding: 1.86rem 0 1.86rem;
+  .align-center {
+    align-items: center;
+  }
+  .justify-center {
+    justify-content: center;
+  }
+  .group_3 {
+    padding: 3rem 0 4rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .tabs-header {
+    background-color: #121212;
+    overflow: hidden;
+  }
+  .view_2 {
+    margin-left: 2.44rem;
+    margin-right: 2.44rem;
+  }
+  .section_4 {
+    background-color: #121212;
+    overflow: hidden;
+    width: 100%;
   }
 </style>
