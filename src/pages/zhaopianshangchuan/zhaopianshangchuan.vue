@@ -1,6 +1,6 @@
 <script setup>
   import { useRouter } from 'vue-router';
-  import { reactive, onMounted } from 'vue';
+  import { ref, reactive, onMounted } from 'vue';
   import axios from 'axios';
 
   const data = reactive({
@@ -8,8 +8,6 @@
     file: null,
     categories: ''
   });
-
-  const props = defineProps({});
 
   function triggerFileInput() {
     const fileInput = document.createElement('input');
