@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_mysqldb import MySQL
 import os
 from flask_cors import CORS
@@ -88,7 +88,7 @@ def upload_photos():
         return jsonify({'message': '该类别未创建'}), 400
     
     # current_dir = os.path.dirname(os.path.abspath(__file__))
-    current_dir = 'D:\\Desktop\\cab\\'
+    current_dir = 'upload\\'
     # 确保目录存在
     file_path = os.path.join(current_dir, username, category_name)
     if not os.path.exists(file_path):
@@ -113,6 +113,49 @@ def upload_photos():
     return jsonify({'message': '上传成功'}), 200
     # except Exception as e:
     #     return jsonify({'error': str(e)}), 500
+
+@app.route('/api/categories', methods=['GET'])
+def get_album():
+    cursor = mysql.connection.cursor()
+
+    user_id = 1  # Replace with dynamic user ID if needed
+    # 第一个查询: 获取用户的所有类别
+    query_categories = """
+    SELECT id, name
+    FROM categories
+    WHERE user_id = %s
+    """
+    cursor.execute(query_categories, (user_id,))
+    categories = cursor.fetchall()
+
+    # 第二个查询: 获取每个类别的最新图片路径
+    for category in categories:
+        query_photos = """
+        SELECT file_path
+        FROM photos
+        WHERE category_id = %s
+        ORDER BY id DESC
+        LIMIT 1
+        """
+        cursor.execute(query_photos, (category['id'],))
+        photo = cursor.fetchone()
+        category['path'] = photo['file_path'] if photo else ''
+    # except Error as e:
+    #     print(f"Error: {e}")
+    #     categories = []
+    # finally:
+    #     cursor.close()
+    #     connection.close()
+    # print(categories)
+    # print(categories)
+
+    # categories_list = [{'id': category['id'], 'name': category['name'], 'path': categories['path']} for category in categories]
+    cursor.close()
+    return jsonify(categories)
+
+@app.route('/upload/<path:filename>')
+def serve_image(filename):
+    return send_from_directory('static/upload', filename)
 
 if __name__ == '__main__':
     if not os.path.exists(app.config['UPLOAD_FOLDER']):

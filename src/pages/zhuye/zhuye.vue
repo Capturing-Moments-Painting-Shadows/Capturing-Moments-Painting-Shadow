@@ -25,7 +25,7 @@
   }
 
   function onClick_4() {
-    router.push({ name: 'zhaopianzhanshi' });
+    router.push({ name: 'xiangcezhanshi' });
   }
 </script>
 

@@ -1,46 +1,3 @@
-<script setup>
-  import { useRouter } from 'vue-router';
-  import { ref, reactive, onMounted } from 'vue';
-  import axios from 'axios';
-
-  const props = defineProps({});
-
-  const data = reactive({
-    categories: [],
-  });
-
-  const categories = ref([]);
-
-  const router = useRouter();
-
-  const routes = [
-    'zhuye', 
-    'denglu', 
-    'leibiechuangjian', 
-    'zhaopianshangchuan',
-    'xiangcezhanshi',
-    'Page_group_tuxiangshengcheng', 
-    'zhaopianzhanshi'
-  ];
-
-  function navigateToRoute(index) {
-    router.push({ name: routes[index] });
-  }
-
-  onMounted(async () => {
-    try {
-      const response = await axios.get('http://localhost:5003/api/categories')
-        categories.value = response.data;
-    } catch(error) {
-        console.error('Error loading categories:', error);
-      };
-    });
-
-  function navigateToAlbum(albumId) {
-    router.push({ name: 'zhaopianzhanshi', params: { id: albumId } });
-  }
-</script>
-
 <template>
   <div class="flex-col page">
     <div class="flex-row justify-between items-center header">
@@ -63,6 +20,7 @@
       <div class="flex-col section_2">
         <span class="self-center text_7">相册展示</span>
         <span class="self-center text_8">这里展示了我们最新的相册作品</span>
+        
         <div class="album-container">
           <div v-for="category in categories" :key="category.id" class="album-item" @click="navigateToAlbum(category.id)">
             <img 
@@ -72,10 +30,50 @@
             <span class="font_2">{{ category.name }}</span>
           </div>
         </div>
+        
       </div>
     </div>
   </div>
 </template>
+
+<script setup>
+import { useRouter } from 'vue-router';
+import { ref, reactive, onMounted } from 'vue';
+import axios from 'axios';
+
+const props = defineProps({});
+
+const categories = ref([]);
+
+const router = useRouter();
+
+const routes = [
+  'zhuye', 
+  'denglu', 
+  'leibiechuangjian', 
+  'zhaopianshangchuan',
+  'xiangcezhanshi',
+  'Page_group_tuxiangshengcheng', 
+  'zhaopianzhanshi'
+];
+
+function navigateToRoute(index) {
+  router.push({ name: routes[index] });
+}
+
+onMounted(async () => {
+  try {
+    const response = await axios.get('http://localhost:5003/api/categories')
+      categories.value = response.data;
+  } catch(error) {
+    console.error('Error loading categories:', error);
+  };
+});
+
+function navigateToAlbum(albumId) {
+  router.push({ name: 'zhaopianzhanshi', params: { id: albumId } });
+}
+</script>
 
 <style scoped lang="css">
   .ml-40-5 {
@@ -169,81 +167,33 @@
     font-family: kaiti;
     line-height: 1rem;
   }
-  .group_2 {
-    margin-top: 3rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-
-  .section_3 {
-    padding: 2rem 10rem 2rem 10rem;
-    background-color: #383838;
-    overflow: hidden;
-  }
-  .view {
-    margin-top: 1.86rem;
-  }
-  .align-center {
-    align-items: center;
-  }
-  .justify-center {
-    justify-content: center;
-  }
-  .group_3 {
-    padding: 3rem 0 4rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  .tabs-header {
-    background-color: #121212;
-    overflow: hidden;
-  }
-  .view_2 {
-    margin-left: 2.44rem;
-    margin-right: 2.44rem;
-  }
-  .section_4 {
-    background-color: #121212;
-    overflow: hidden;
-    width: 100%;
-  }
-
-
   .album-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
   }
-  
   .album-item {
-    width: 30%; /* 确保每行最多显示三个项目 */
+    width: 30%;
     margin-bottom: 2rem;
     position: relative;
     cursor: pointer;
-    text-align: center; /* 文字居中 */
   }
-  
   .image {
     width: 100%;
     border-radius: 2rem;
-    height: auto; /* 自动调整高度以保持比例 */
+    height: 20rem;
     object-fit: cover;
-    display: block; /* 确保图片作为块级元素 */
   }
-  
   .font_2 {
-    display: block; /* 确保文字作为块级元素 */
-    text-align: center; /* 文字居中 */
     font-size: 1.5rem;
     font-family: kaiti;
     color: #ffffff;
-    background-color: rgba(0, 0, 0, 0.5); /* 半透明背景 */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.5);
     padding: 0.5rem 1rem;
     border-radius: 1rem;
-    margin-top: 0.5rem; /* 增加文字与图片之间的间距 */
   }
-  
-  
 </style>
