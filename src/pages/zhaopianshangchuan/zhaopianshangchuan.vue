@@ -114,12 +114,12 @@
           <span class="self-start text_7">凝时绘影 照片上传</span>
           <span class="self-center text_8 mt-21">请上传您的照片并指定类别</span>
         </div>
-        <div class="flex-col self-stretch group_2">
+        <div class="flex-col self-stretch  justify-between items-center section group_2">
           <span class="self-start font text_9">照片标题</span>
-          <el-input class="input mt-14 elinput" v-model="data.title"></el-input>
+          <el-input class="input mt-14 " v-model="data.title"></el-input>
         </div>
-        <div class="flex-col self-stretch group_3">
-          <span class="self-start font text_11">类别</span>
+        <div class="flex-col self-stretch section group_3">
+          <span class="self-start justify-between font text_11">类别</span>
           <div class="flex-row justify-between items-center section_5 mt-14">
             <div class="flex-col justify-start items-end group_1">
               <select v-model="selectedCategory" class="input mt-14">
@@ -135,11 +135,11 @@
             </div>
           </div>
         </div>
-        <div class="flex-col items-start self-stretch group_5">
+        <div class="flex-col justify-start self-stretch group_5">
           <span class="font text_13">凝时绘影 照片上传</span>
           <img
-            class="image_5 mt-8"
-            src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=a8dca04ade96f8b8f9aa82aae0a32183.png"
+            class="image_5 mt-14"
+            src="https://picture.gptkong.com/20240609/0432d2943f603b4fca82a7995c306b43ee.png"
             @click="triggerFileInput"
             />
         </div>
@@ -180,7 +180,7 @@
   .text-wrapper {
     padding: 0.47rem 0 0.72rem;
     border-radius: 0.38rem;
-    height: 2.5rem;
+    cursor: pointer; /* 确保它像按钮一样可点击 */
   }
   .text {
     margin-left: 0.22rem;
@@ -189,12 +189,12 @@
     font-size: 1.38rem;
     font-family: "Noto Serif SC", serif;
     font-weight: 700;
-    line-height: 1.31rem;
+
   }
   .font {
     font-size: 1rem;
     font-family: "Noto Serif SC", serif;
-    line-height: 0.94rem;
+
     color: #ffffff;
   }
   .text_2 {
@@ -249,23 +249,27 @@
   }
   .group_2 {
     margin-top: 4.52rem;
+    
   }
   .text_9 {
     line-height: 0.91rem;
+    width: 30rem;
   }
   .input {
     align-self: stretch;
+    border-radius: 0.75rem;
   }
   .group_3 {
     margin-top: 2.76rem;
   }
   .text_11 {
     line-height: 0.91rem;
+    width: 30rem;
   }
   .section_5 {
-    padding: 0.5rem 0.75rem;
     background-color: #383838;
     border-radius: 0.75rem;
+    overflow: hidden;
   }
   .group_1 {
     padding: 0.41rem 0;
@@ -276,7 +280,7 @@
     height: 1.19rem;
   }
   .group_4 {
-    margin-right: 3.25rem;
+    margin-right: 3rem;
     padding-left: 0.75rem;
     padding-right: 0.72rem;
   }
@@ -299,11 +303,11 @@
     width: 10rem;
   }
   .image_5 {
+    padding: 0.99rem 0 1.09rem;
     border-radius: 0.75rem;
-    height: 17.88rem;
   }
   .text-wrapper_2 {
-    margin-top: 4.44rem;
+    margin-top: 3rem;
     padding: 0.99rem 0 1.09rem;
     background-color: #800080;
     border-radius: 0.75rem;
@@ -316,7 +320,5 @@
     font-family: "Noto Serif SC", serif;
     line-height: 1.17rem;
   }
-  .elinput {
-    width: 7.06rem !important;
-  }
+
 </style>

@@ -72,13 +72,13 @@
       <div class="flex-row items-center">
         <div class="flex-col justify-start text-wrapper"><span class="text">凝时绘影</span></div>
         <div class="flex-row ml-81">
-          <div class="flex-row shrink-0 ml-63">
-            <span class="font_1 text_3 " @click="onClick">主页</span>
-            <span class="font_1 text_3 ml-53">登录注册</span>
-            <span class="font_1 text_3 ml-53" @click="onClick_1">类别创建</span>
-            <span class="font_1 text_4 ml-53" @click="onClick_2">照片上传</span>
-            <span class="font_1 text_5 ml-53" @click="onClick_3">图像生成</span>
-            <span class="font_1 text_6 ml-53" @click="onClick_4">相册展示</span>
+          <span class="font text_2" @click="onClick">主页</span>
+          <div class="flex-row ml-63">
+            <span class="font text_3" @click="onClick_1">登录注册</span>
+            <span class="font text_4 ml-53" @click="onClick_2">类别创建</span>
+            <span class="font text_5 ml-53" @click="onClick_3">照片上传</span>
+            <span class="font ml-53">图像生成</span>
+            <span class="font text_6 ml-53" @click="onClick_4">相册展示</span>
           </div>
         </div>
       </div>

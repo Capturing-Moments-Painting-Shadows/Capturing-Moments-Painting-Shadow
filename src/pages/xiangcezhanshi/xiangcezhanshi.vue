@@ -18,9 +18,8 @@
     'denglu', 
     'leibiechuangjian', 
     'zhaopianshangchuan',
-    'xiangcezhanshi',
-    'Page_group_tuxiangshengcheng', 
-    'zhaopianzhanshi'
+    'Page_group_tuxiangshengcheng',
+    'xiangcezhanshi'
   ];
 
   function navigateToRoute(index) {
