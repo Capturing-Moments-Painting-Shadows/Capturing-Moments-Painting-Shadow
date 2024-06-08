@@ -5,10 +5,6 @@
 
   const props = defineProps({});
 
-  const data = reactive({
-    categories: [],
-  });
-
   const categories = ref([]);
 
   const router = useRouter();
@@ -18,9 +14,8 @@
     'denglu', 
     'leibiechuangjian', 
     'zhaopianshangchuan',
-    'xiangcezhanshi',
     'Page_group_tuxiangshengcheng', 
-    'zhaopianzhanshi'
+    'xiangcezhanshi'
   ];
 
   function navigateToRoute(index) {
@@ -36,8 +31,8 @@
       };
     });
 
-  function navigateToAlbum(albumId) {
-    router.push({ name: 'zhaopianzhanshi', params: { id: albumId } });
+  function navigateToAlbum(albumId, userId) {
+    router.push({ name: 'zhaopianzhanshi', params: { category_id: albumId, user_id : userId } });
   }
 </script>
 
@@ -64,7 +59,7 @@
         <span class="self-center text_7">相册展示</span>
         <span class="self-center text_8">这里展示了我们最新的相册作品</span>
         <div class="album-container">
-          <div v-for="category in categories" :key="category.id" class="album-item" @click="navigateToAlbum(category.id)">
+          <div v-for="category in categories" :key="category.id" class="album-item" @click="navigateToAlbum(category.id, 1)">
             <img 
               :src="category.path ? `http://localhost:5003/${category.path}` : 'https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=9f5c087ce21f2c8cb52379d16e5ba492.png'" 
               class="image" 
@@ -214,12 +209,14 @@
   .album-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start; /* 确保不足三个的那一行靠左对齐 */
+    gap: 2rem; /* 增加项目之间的间距 */
+    margin-top: 4rem; /* 增加当前组件与上一个组件之间的距离 */
   }
+  
   
   .album-item {
     width: 30%; /* 确保每行最多显示三个项目 */
-    margin-bottom: 2rem;
     position: relative;
     cursor: pointer;
     text-align: center; /* 文字居中 */

@@ -1,59 +1,55 @@
 <script setup>
-  import { useRouter } from 'vue-router';
-  import { reactive, onMounted } from 'vue';
+  import { useRoute, useRouter } from 'vue-router';
+  import { ref, reactive, onMounted } from 'vue';
+  import axios from 'axios';
 
   const props = defineProps({});
 
-  const data = reactive({});
+  const photos = ref([]);
 
   const router = useRouter();
+  const category_name = '小猫';
+  // const categoryId = route.params.category_id;
+  // const userId = route.params.user_id;
 
-  function onClick() {
-    router.push({ name: 'zhuye' });
+  const routes = [
+    'zhuye', 
+    'denglu', 
+    'leibiechuangjian', 
+    'zhaopianshangchuan',
+    'Page_group_tuxiangshengcheng', 
+    'xiangcezhanshi'
+  ];
+
+  function navigateToRoute(index) {
+    router.push({ name: routes[index] });
   }
 
-  function onClick_1() {
-    router.push({ name: 'denglu' });
-  }
+  onMounted(async () => {
+    // const categoryId = route.params.category_id;
+    // const userId = route.params.user_id;
+    // const category_name = 4;
+    const categoryId = 4;
+    const userId = 1;
+    console.log(`Request params - categoryId: ${categoryId}, userId: ${userId}`); // 打印请求参数
 
-  function onClick_2() {
-    router.push({ name: 'leibiechuangjian' });
-  }
+    if (!categoryId || !userId) {
+      console.error('Missing categoryId or userId');
+      return;
+    }
 
-  function onClick_3() {
-    router.push({ name: 'zhaopianshangchuan' });
-  }
+    try {
+      const response = await axios.get('http://localhost:5003/show_photos', {
+        params: { categoryId, userId }
+      });
+      photos.value = response.data;
+    } catch(error) {
+        console.error('Error loading photos:', error);
+      };
+    });
 
-  function onClick_4() {
-    router.push({ name: 'Page_group_tuxiangshengcheng' });
-  }
-
-  function onClick_5() {
-    router.push({ name: 'xiangcezhanshi' });
-  }
-
-  function onClick_6() {
-    router.push({ name: 'zhaopiancaozuo' });
-  }
-
-  function onClick_7() {
-    router.push({ name: 'zhaopiancaozuo' });
-  }
-
-  function onClick_8() {
-    router.push({ name: 'zhaopiancaozuo' });
-  }
-
-  function onClick_9() {
-    router.push({ name: 'zhaopiancaozuo' });
-  }
-
-  function onClick_10() {
-    router.push({ name: 'zhaopiancaozuo' });
-  }
-
-  function onClick_11() {
-    router.push({ name: 'zhaopiancaozuo' });
+  function navigateToAlbum(photoId) {
+    router.push({ name: 'zhaopiancaozuo', params: { id: photoId } });
   }
 </script>
 
@@ -63,13 +59,13 @@
       <div class="flex-row items-center">
         <div class="flex-col justify-start text-wrapper"><span class="text">凝时绘影</span></div>
         <div class="flex-row group_1 ml-40-5">
-          <span class="font" @click="onClick">主页</span>
+          <span class="font" @click="navigateToRoute(0)">主页</span>
           <div class="flex-row shrink-0 group_5 ml-31-5">
-            <span class="font text_2" @click="onClick_1">登录注册</span>
-            <span class="font text_3 ml-26" @click="onClick_2">类别创建</span>
-            <span class="font ml-26" @click="onClick_3">照片上传</span>
-            <span class="font text_4 ml-26" @click="onClick_4">图像生成</span>
-            <span class="font text_5 ml-26" @click="onClick_5">相册展示</span>
+            <span class="font text_2" @click="navigateToRoute(1)">登录注册</span>
+            <span class="font text_3 ml-26" @click="navigateToRoute(2)">类别创建</span>
+            <span class="font ml-26" @click="navigateToRoute(3)">照片上传</span>
+            <span class="font text_4 ml-26" @click="navigateToRoute(4)">图像生成</span>
+            <span class="font text_5 ml-26" @click="navigateToRoute(5)">相册展示</span>
           </div>
         </div>
       </div>
@@ -77,51 +73,17 @@
     </div>
     <div class="flex-col group section">
       <div class="flex-col section_2">
-      <span class="self-center text_7">风景照</span>
-      <span class="self-center text_8">这个相册中存放的是风景照</span>
-      <div class="flex-row self-stretch group_2">
-        <img
-          class="image"
-          src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=205486bd998e43e336e6f6b0c5266bd6.png"
-        />
-        <img
-          class="image"
-          src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=5020e0204f7a54681d0b5a73b036045f.png"
-        />
-        <img
-          class="image"
-          src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=b64d74a4134b3de75e1a8b5340aa4e1e.png"
-        />
-      </div>
-      <div class="flex-row justify-between align-center self-stretch section_3 view">
-        <span class="font_2" @click="onClick_6">照片1</span>
-        <span class="font_2" @click="onClick_7">照片2</span>
-        <span class="font_2" @click="onClick_8">照片3</span>
-      </div>
-      <div class="flex-row self-stretch group_3">
-        <img
-          class="image"
-          src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=ad80034784574a70778c94cd92579325.png"
-        />
-        <img
-          class="image "
-          src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=aab6b567d1adcf40741b20ae0fd1d639.png"
-        />
-        <img
-          class="image "
-          src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=b1925c4f57210a7d7c22a85d3594b113.png"
-        />
-      </div>
-      </div>
-      <div class="flex-col section">
-        <div class="flex-col justify-start tabs-header">
-          <div class="flex-row justify-between section_3 view_2">
-            <span class="font_2" @click="onClick_9">照片4</span>
-            <span class="font_2" @click="onClick_10">照片5</span>
-            <span class="font_2" @click="onClick_11">照片6</span>
+        <span class="self-center text_7">{{ category_name }}类</span>
+        <span class="self-center text_8">这个相册中存放的是{{ category_name }}的照片</span>
+        <div class="photo-container">
+          <div v-for="photo in photos" :key="photo.id" class="photo-item" @click="navigateToAlbum(photo.id)">
+            <img 
+              :src="photo.path ? `http://localhost:5003/${photo.path}` : 'https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=9f5c087ce21f2c8cb52379d16e5ba492.png'" 
+              class="image" 
+            />
+            <span class="font_2">{{ photo.title }}</span>
           </div>
         </div>
-        <div class="group section_4"></div>
       </div>
     </div>
   </div>
@@ -272,5 +234,40 @@
     background-color: #121212;
     overflow: hidden;
     width: 100%;
+  }
+
+  .photo-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* 确保不足三个的那一行靠左对齐 */
+    gap: 2rem; /* 增加项目之间的间距 */
+    margin-top: 4rem; /* 增加当前组件与上一个组件之间的距离 */
+  }
+  
+  .photo-item {
+    width: calc(33.33% - 2rem); /* 确保每行最多显示三个项目，并考虑间距 */
+    position: relative;
+    cursor: pointer;
+    text-align: center; /* 文字居中 */
+  }
+  
+  .image {
+    width: 100%;
+    border-radius: 2rem;
+    height: auto; /* 自动调整高度以保持比例 */
+    object-fit: cover;
+    display: block; /* 确保图片作为块级元素 */
+  }
+  
+  .font_2 {
+    display: block; /* 确保文字作为块级元素 */
+    text-align: center; /* 文字居中 */
+    font-size: 1.5rem;
+    font-family: kaiti;
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明背景 */
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    margin-top: 0.5rem; /* 增加文字与图片之间的间距 */
   }
 </style>
