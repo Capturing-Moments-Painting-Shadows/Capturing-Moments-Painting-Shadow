@@ -1,13 +1,44 @@
 <script setup>
   import { useRouter } from 'vue-router';
   import { reactive, onMounted } from 'vue';
+  import axios from 'axios';
 
   const props = defineProps({});
 
   const data = reactive({
-    v_model: '',
-    v_model_1: '',
+    name: '',
+    description: '',
   });
+
+  const create_category = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/create_category', {
+        // username: data.username
+        name: data.name,
+        description: data.description
+      });
+      console.log('Response:', response);
+      if (response && response.data) {
+        if (response.status === 201) {
+          console.log(response.data.message);
+          // handle the success, e.g., show success message to the user
+          alert('类别创建成功！'); // 显示类别创建成功消息给用户
+          // Redirect to login page
+          router.push('/leibiechuangjian'); // 跳转到相册页面
+        } else {
+          console.error('Unexpected response format:', response);
+        }
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        console.error('Error response data:', error.response.data);
+        // handle the error, e.g., show error message to the user
+        alert(error.response.data.message); // 显示错误消息给用户
+      } else {
+        console.error('Unexpected error:', error);
+      }
+    }
+  };
 
   const router = useRouter();
 
@@ -62,11 +93,11 @@
         </div>
         <div class="flex-col mt-90">
           <span class="self-start font">类别名称</span>
-          <el-input class="input_1 elinput" v-model="data.v_model"></el-input>
+          <el-input class="input_1 elinput" v-model="data.name" placeholder="请输入类别名称"></el-input>
           <span class="self-start font text_12">类别描述</span>
           <div class="flex-col self-stretch group">
-            <el-input v-model="data.v_model_1" class="elinput_1"></el-input>
-            <div class="flex-col justify-start items-center text-wrapper_3 mt-16">
+            <el-input v-model="data.description" class="elinput_1" placeholder="请输入类别描述"></el-input>
+            <div @click="create_category" class="flex-col justify-start items-center text-wrapper_3 mt-16">
               <span class="text_14">创建类别</span>
             </div>
           </div>
@@ -75,6 +106,7 @@
     </div>
   </div>
 </template>
+
 
 <style scoped lang="css">
   .ml-81 {
@@ -88,6 +120,9 @@
   }
   .mt-83 {
     margin-top: 5.19rem;
+  }
+  .mt-90 {
+    margin-top: 3rem;
   }
   .page {
     background-color: #000000;
@@ -111,13 +146,13 @@
     margin-right: 0.21rem;
     color: #ffffff;
     font-size: 1.38rem;
-    font-family: Kalam;
+    font-family: "Noto Serif SC", serif;
     font-weight: 700;
     line-height: 1.31rem;
   }
   .font {
     font-size: 1rem;
-    font-family: HarmonyOSSansSC;
+    font-family: "Noto Serif SC", serif;
     line-height: 0.93rem;
     color: #ffffff;
   }
@@ -143,7 +178,7 @@
     margin-right: 1.39rem;
     color: #fcfcfc;
     font-size: 1.25rem;
-    font-family: IdeaFonts MeiLingTi;
+    font-family: "Noto Serif SC", serif;
     line-height: 1.11rem;
   }
   .section {
@@ -162,14 +197,14 @@
   .text_9 {
     color: #ffffff;
     font-size: 3rem;
-    font-family: HarmonyOSSansSC;
+    font-family: "Noto Serif SC", serif;
     font-weight: 700;
     line-height: 2.87rem;
   }
   .text_10 {
     color: #ffffff;
     font-size: 1.13rem;
-    font-family: HarmonyOSSansSC;
+    font-family: "Noto Serif SC", serif;
     line-height: 1.05rem;
   }
   .input_1 {
@@ -188,11 +223,13 @@
     background-color: #800080;
     border-radius: 0.75rem;
     width: 45rem;
+    cursor: pointer; /* 确保它像按钮一样可点击 */
+    text-align: center; /* 确保文字居中 */
   }
   .text_14 {
     color: #ffffff;
     font-size: 1.25rem;
-    font-family: HarmonyOSSansSC;
+    font-family: "Noto Serif SC", serif;
     line-height: 1.17rem;
   }
   .elinput {

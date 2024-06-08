@@ -1,13 +1,27 @@
 <script setup>
   import { useRouter } from 'vue-router';
   import { reactive, onMounted } from 'vue';
+  import axios from 'axios';
+
+  const data = reactive({
+    title: '',
+    file: null,
+    categories: ''
+  });
 
   const props = defineProps({});
 
-  const data = reactive({
-    v_model: '',
-  });
+  function triggerFileInput() {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*'; // 仅接受图片类型的文件
+    fileInput.addEventListener('change', handleFileUpload);
+    fileInput.click(); // 模拟点击文件输入框
+  }
 
+  const selectedCategory = ref('');
+  const categories = ref([]);
+  
   const router = useRouter();
 
   function onClick() {
@@ -29,6 +43,49 @@
   function onClick_4() {
     router.push({ name: 'xiangcezhanshi' });
   }
+
+  function handleFileUpload(event) {
+    data.file = event.target.files[0];
+  }
+
+  async function uploadPhoto() {
+    const formData = new FormData();
+    formData.append('title', data.title);
+    formData.append('category_id', selectedCategory.value);
+    formData.append('file', data.file);
+
+    try {
+      const response = await axios.post('http://localhost:5003/upload_photos', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      if (response && response.data) {
+        if (response.status === 201) {
+          alert('上传成功！');
+        } else {
+          console.error('Unexpected response format:', response);
+        }
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        console.error('Error response data:', error.response.data);
+        alert(error.response.data.message); // 显示错误消息给用户
+      } else {
+        console.error('Unexpected error:', error);
+      }
+    }
+  }
+
+  onMounted(async () => {
+    try {
+      const response = await axios.get('http://localhost:5003/categories');
+      categories.value = response.data;
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  });
+
 </script>
 
 <template>
@@ -61,16 +118,18 @@
         </div>
         <div class="flex-col self-stretch group_2">
           <span class="self-start font text_9">照片标题</span>
-          <el-input class="input mt-14 elinput" v-model="data.v_model"></el-input>
+          <el-input class="input mt-14 elinput" v-model="data.title"></el-input>
         </div>
         <div class="flex-col self-stretch group_3">
           <span class="self-start font text_11">类别</span>
           <div class="flex-row justify-between items-center section_5 mt-14">
             <div class="flex-col justify-start items-end group_1">
-              <img
-                class="self-start image_4"
-                src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=7820f75efe4be75e2b05434d901b355d.png"
-              />
+              <select v-model="selectedCategory" class="input mt-14">
+                <option value="" disabled>选择照片分类</option>
+                <option v-for="category in categories" :key="category.id" :value="category.id">
+                  {{ category.name }}
+                </option>
+              </select>
             </div>
             <div class="flex-row items-center group_4">
               <div class="section_6"></div>
@@ -83,9 +142,10 @@
           <img
             class="image_5 mt-8"
             src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=a8dca04ade96f8b8f9aa82aae0a32183.png"
-          />
+            @click="triggerFileInput"
+            />
         </div>
-        <div class="flex-col justify-start items-center self-stretch text-wrapper_2">
+        <div @click="uploadPhoto" class="flex-col justify-start items-center self-stretch text-wrapper_2">
           <span class="text_14">上传</span>
         </div>
       </div>
@@ -129,13 +189,13 @@
     margin-right: 0.21rem;
     color: #ffffff;
     font-size: 1.38rem;
-    font-family: Kalam;
+    font-family: "Noto Serif SC", serif;
     font-weight: 700;
     line-height: 1.31rem;
   }
   .font {
     font-size: 1rem;
-    font-family: HarmonyOSSansSC;
+    font-family: "Noto Serif SC", serif;
     line-height: 0.94rem;
     color: #ffffff;
   }
@@ -155,7 +215,7 @@
     margin-right: 1.39rem;
     color: #fcfcfc;
     font-size: 1.25rem;
-    font-family: IdeaFonts MeiLingTi;
+    font-family: "Noto Serif SC", serif;
     line-height: 1.11rem;
   }
   .section {
@@ -176,7 +236,7 @@
   .text_7 {
     color: #ffffff;
     font-size: 3rem;
-    font-family: HarmonyOSSansSC;
+    font-family: "Noto Serif SC", serif;
     font-weight: 700;
     line-height: 3.5rem;
     text-align: center;
@@ -186,7 +246,7 @@
   .text_8 {
     color: #ffffff;
     font-size: 1.13rem;
-    font-family: HarmonyOSSansSC;
+    font-family: "Noto Serif SC", serif;
     line-height: 1.06rem;
   }
   .group_2 {
@@ -249,11 +309,13 @@
     padding: 0.99rem 0 1.09rem;
     background-color: #800080;
     border-radius: 0.75rem;
+    cursor: pointer; /* 确保它像按钮一样可点击 */
+    text-align: center; /* 确保文字居中 */
   }
   .text_14 {
     color: #ffffff;
     font-size: 1.25rem;
-    font-family: HarmonyOSSansSC;
+    font-family: "Noto Serif SC", serif;
     line-height: 1.17rem;
   }
   .elinput {

@@ -97,13 +97,13 @@
     margin-right: 0.21rem;
     color: #ffffff;
     font-size: 1.38rem;
-    font-family: Kalam;
+    font-family: "Noto Serif SC", serif;
     font-weight: 700;
     line-height: 1.31rem;
   }
   .font {
     font-size: 1rem;
-    font-family: HarmonyOSSansSC;
+    font-family: "Noto Serif SC", serif;
     line-height: 0.94rem;
     color: #ffffff;
   }
@@ -123,7 +123,7 @@
     margin-right: 1.39rem;
     color: #fcfcfc;
     font-size: 1.25rem;
-    font-family: IdeaFonts MeiLingTi;
+    font-family: "Noto Serif SC", serif;
     line-height: 1.11rem;
   }
   .section_3 {
@@ -149,14 +149,14 @@
   .text_7 {
     color: #ffffff;
     font-size: 5rem;
-    font-family: HarmonyOSSansSC;
+    font-family: "Noto Serif SC", serif;
     font-weight: 700;
     line-height: 4.67rem;
   }
   .text_8 {
     color: #ffffff;
     font-size: 1.13rem;
-    font-family: HarmonyOSSansSC;
+    font-family: "Noto Serif SC", serif;
     line-height: 1.14rem;
   }
 </style>

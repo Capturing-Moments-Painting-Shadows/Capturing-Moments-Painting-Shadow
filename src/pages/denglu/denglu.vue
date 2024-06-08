@@ -72,9 +72,9 @@
       <div class="flex-row items-center">
         <div class="flex-col justify-start text-wrapper"><span class="text">凝时绘影</span></div>
         <div class="flex-row ml-81">
-          <span class="font" @click="onClick">主页</span>
           <div class="flex-row shrink-0 ml-63">
-            <span class="font_1">登录注册</span>
+            <span class="font_1 text_3 " @click="onClick">主页</span>
+            <span class="font_1 text_3 ml-53">登录注册</span>
             <span class="font_1 text_3 ml-53" @click="onClick_1">类别创建</span>
             <span class="font_1 text_4 ml-53" @click="onClick_2">照片上传</span>
             <span class="font_1 text_5 ml-53" @click="onClick_3">图像生成</span>
@@ -87,7 +87,7 @@
     <div class="flex-row justify-center section section_2">
       <div class="flex-col justify-start section_3">
         <div class="flex-col items-center section_4">
-          <span class="text_12">欢迎加入凝时绘影</span>
+          <span class="text_8">欢迎加入凝时绘影</span>
           <span class="font_2 mt-38">记录美好瞬间，留存珍贵回忆</span>
         </div>
       </div>
@@ -155,7 +155,7 @@
     margin-right: 0.21rem;
     color: #ffffff;
     font-size: 1.38rem;
-    font-family: Kalam;
+    font-family: "Noto Serif SC", serif;
     font-weight: 700;
     line-height: 1.31rem;
   }
@@ -163,10 +163,11 @@
     color: #ffffff;
     font-size: 1rem;
     line-height: 0.94rem;
+    font-family: "Noto Serif SC", serif;
   }
   .font_1 {
     font-size: 1rem;
-    font-family: HarmonyOSSansSC;
+    font-family: "Noto Serif SC", serif;
     line-height: 0.94rem;
     color: #ffffff;
   }
@@ -186,7 +187,7 @@
     margin-right: 1.39rem;
     color: #fcfcfc;
     font-size: 1.25rem;
-    font-family: IdeaFonts MeiLingTi;
+    font-family: "Noto Serif SC", serif;
     line-height: 1.11rem;
   }
   .section {
@@ -214,10 +215,11 @@
   .text_12 {
     margin-left: 0.8rem;
     line-height: 0.92rem;
+    color: #ffffff;
   }
   .font_2 {
     font-size: 1.13rem;
-    font-family: HarmonyOSSansSC;
+    font-family: "Noto Serif SC", serif;
     line-height: 1.14rem;
     color: #ffffff;
   }
@@ -231,7 +233,7 @@
   .text_8 {
     color: #ffffff;
     font-size: 2.5rem;
-    font-family: HarmonyOSSansSC;
+    font-family: "Noto Serif SC", serif;
     font-weight: 700;
     line-height: 2.35rem;
   }
@@ -257,7 +259,7 @@
   .text_13 {
     color: #ffffff;
     font-size: 1.25rem;
-    font-family: HarmonyOSSansSC;
+    font-family: "Noto Serif SC", serif;
     line-height: 1.12rem;
   }
   .elinput {
