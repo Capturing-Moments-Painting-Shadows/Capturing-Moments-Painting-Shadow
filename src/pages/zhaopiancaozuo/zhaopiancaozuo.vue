@@ -2,6 +2,7 @@
   import { useRoute, useRouter } from 'vue-router';
   import { ref, reactive, onMounted } from 'vue';
   import axios from 'axios';
+  import { ElButton, ElInput } from 'element-plus';
 
   const props = defineProps({});
 
@@ -22,6 +23,16 @@
 
   function navigateToRoute(index) {
     router.push({ name: routes[index] });
+  }
+
+  function deletePhoto() {
+    // 实现删除照片的逻辑
+    console.log('删除照片');
+  }
+
+  function submitDescription() {
+    // 实现提交注释的逻辑
+    console.log('提交注释', data.description);
   }
 </script>
 
@@ -44,15 +55,23 @@
       <span class="text_6">未登录</span>
     </div>
     <div class="flex-col section section_2">
-      <img
-        class="shrink-0 image"
-        src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=45badbf1f468990ccbc2f71caefc843a.png"
-      />
+      <div class="flex-row">
+        <img
+          class="shrink-0 image"
+          src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=45badbf1f468990ccbc2f71caefc843a.png"
+        />
+        <div class="description-box">
+          <p class="description-text">{{ data.description }}</p>
+        </div>
+      </div>
       <div class="flex-row justify-between group mt-64">
-        <span class="self-start text_7">{{ photo_name }}</span>
-        <div class="flex-col group_2">
-          <el-button class="button mt-6 elbutton">提交注释</el-button>
+        <div class="flex-row items-center">
+          <span class="self-start text_7">{{ photo_name }}</span>
+        </div>
+        <div class="flex-row group_2">
           <el-input v-model="data.description" class="elinput_1" placeholder="请在此处添加照片的注释..."></el-input>
+          <el-button class="button elbutton" @click="submitDescription">提交注释</el-button>
+          <el-button class="delete-button" @click="deletePhoto">删除图片</el-button>
         </div>
       </div>
     </div>
@@ -124,15 +143,29 @@
     flex-grow: 1;
   }
   .section_2 {
-    padding: 5rem 5rem 5rem;
+    padding: 2rem 5rem 5rem;
     background-color: #121212;
     overflow: hidden;
     width: 100%;
   }
   .image {
     border-radius: 1rem;
-    width: 80rem;
-    height: 43.75rem;
+    width: 50rem;
+    height: 33rem;
+    margin-right: 2rem; /* 图片和描述框之间的间距 */
+  }
+  .description-box {
+    flex-grow: 1;
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-family: "Noto Serif SC", serif;
+    line-height: 1.5rem;
+    background-color: #333333;
+
+    border-radius: 0.5rem;
+  }
+  .description-text {
+    white-space: pre-wrap; /* 保留换行符 */
   }
   .group {
     padding-left: 0.24rem;
@@ -143,21 +176,28 @@
     font-family: "Noto Serif SC", serif;
     font-weight: 700;
     line-height: 2.81rem;
+
+  }
+  .delete-button {
+    color: #ff4d4f;
+    border-color: #ff4d4f;
   }
   .group_2 {
     display: flex;
+    justify-content: space-between;
     align-items: center; /* 垂直居中对齐 */
+    gap: 1rem;
   }
   .text_8 {
     color: #ffffff;
     font-size: 1.13rem;
     font-family: "Noto Serif SC", serif;
-    line-height: 1.05rem;
-  }
-  .button {
-    align-self: flex-end;
+
   }
   .elbutton {
     width: 7.5rem !important;
+  }
+  .elinput_1 {
+    width: 40rem;
   }
 </style>
