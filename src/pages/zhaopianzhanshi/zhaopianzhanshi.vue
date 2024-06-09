@@ -1,55 +1,64 @@
 <script setup>
   import { useRoute, useRouter } from 'vue-router';
-  import { ref, reactive, onMounted } from 'vue';
+  import { ref, reactive, onMounted, computed } from 'vue';
   import axios from 'axios';
+  import { useStore } from 'vuex';
 
   const props = defineProps({});
 
   const photos = ref([]);
-
   const router = useRouter();
-  const category_name = '小猫';
-  // const categoryId = route.params.category_id;
-  // const userId = route.params.user_id;
+  const store = useStore();
 
-  const routes = [
-    'zhuye', 
-    'denglu', 
-    'leibiechuangjian', 
-    'zhaopianshangchuan',
-    'Page_group_tuxiangshengcheng', 
-    'xiangcezhanshi'
-  ];
+  const isAuthenticated = computed(() => store?.state?.isAuthenticated || false);
+  const username = computed(() => store?.state?.username || '未登录');
+  const category = computed(() => store?.state?.selectedCategory || null);
+  const categoryID = computed(() => store?.state?.selectedCategory?.id || null);
+  console.log("categoryID:",categoryID)
 
-  function navigateToRoute(index) {
-    router.push({ name: routes[index] });
+  function onClick() {
+    router.push({ name: 'zhuye' });
+  }
+
+  function onClick_1() {
+    router.push({ name: 'denglu' });
+  }
+
+  function onClick_2() {
+    router.push({ name: 'leibiechuangjian' });
+  }
+
+  function onClick_3() {
+    router.push({ name: 'zhaopianshangchuan' });
+  }
+
+  function onClick_4() {
+    router.push({ name: 'Page_group_tuxiangshengcheng' });
+  }
+
+  function onClick_5() {
+    router.push({ name: 'xiangcezhanshi' });
   }
 
   onMounted(async () => {
-    // const categoryId = route.params.category_id;
-    // const userId = route.params.user_id;
-    // const category_name = 4;
-    const categoryId = 4;
-    const userId = 1;
-    console.log(`Request params - categoryId: ${categoryId}, userId: ${userId}`); // 打印请求参数
-
-    if (!categoryId || !userId) {
-      console.error('Missing categoryId or userId');
+    if (!category || !username.value) {
+      console.error('Missing category or username');
       return;
     }
 
     try {
-      const response = await axios.get('http://localhost:5003/show_photos', {
-        params: { categoryId, userId }
+      const response = await axios.get('http://localhost:5003/zhaopianzhanshi', {
+        params: { categoryID: categoryID.value, username: username.value }
       });
       photos.value = response.data;
-    } catch(error) {
-        console.error('Error loading photos:', error);
-      };
-    });
+    } catch (error) {
+      console.error('Error loading photos:', error);
+    }
+  });
 
-  function navigateToAlbum(photoId) {
-    router.push({ name: 'zhaopiancaozuo', params: { id: photoId } });
+  function navigateToAlbum(photo) {
+    store.dispatch('setSelectedPhoto', photo); // 存储选择的照片到 Vuex
+    router.push({ name: 'zhaopiancaozuo'});
   }
 </script>
 
@@ -58,27 +67,31 @@
     <div class="flex-row justify-between items-center header">
       <div class="flex-row items-center">
         <div class="flex-col justify-start text-wrapper"><span class="text">凝时绘影</span></div>
-        <div class="flex-row group_1 ml-40-5">
-          <span class="font" @click="navigateToRoute(0)">主页</span>
-          <div class="flex-row shrink-0 group_5 ml-31-5">
-            <span class="font text_2" @click="navigateToRoute(1)">登录注册</span>
-            <span class="font text_3 ml-26" @click="navigateToRoute(2)">类别创建</span>
-            <span class="font ml-26" @click="navigateToRoute(3)">照片上传</span>
-            <span class="font text_4 ml-26" @click="navigateToRoute(4)">图像生成</span>
-            <span class="font text_5 ml-26" @click="navigateToRoute(5)">相册展示</span>
+        <div class="flex-row ml-81">
+          <span class="font text_3 ml-53" @click="onClick">主页</span>
+          <div class="flex-row ml-63">
+            <span class="font text_3 ml-53" @click="onClick_1">登录注册</span>
+            <span class="font text_3 ml-53" @click="onClick_2">类别创建</span>
+            <span class="font text_3 ml-53" @click="onClick_3">照片上传</span>
+            <span class="font text_3 ml-53" @click="onClick_4">图像生成</span>
+            <span class="font text_3 ml-53" @click="onClick_5">相册展示</span>
           </div>
         </div>
       </div>
-      <span class="text_6">未登录</span>
+      <div>
+        <span class="font text_3 ml-53">
+          {{ isAuthenticated ? username : '未登录' }}
+        </span>
+      </div>
     </div>
     <div class="flex-col group section">
       <div class="flex-col section_2">
-        <span class="self-center text_7">{{ category_name }}类</span>
-        <span class="self-center text_8">这个相册中存放的是{{ category_name }}的照片</span>
+        <span class="self-center text_7">{{ category.name }}</span>
+        <span class="self-center text_8">这个相册中存放的是{{ category.name }}的照片</span>
         <div class="photo-container">
-          <div v-for="photo in photos" :key="photo.id" class="photo-item" @click="navigateToAlbum(photo.id)">
+          <div v-for="photo in photos" :key="photo.id" class="photo-item" @click="navigateToAlbum(photo)">
             <img 
-              :src="photo.path ? `http://localhost:5003/${photo.path}` : 'https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=9f5c087ce21f2c8cb52379d16e5ba492.png'" 
+              :src="photo.file_path ? `http://localhost:5003/${photo.file_path}` : 'https://picture.gptkong.com/20240610/00138a0565ede2419f85b2148a2030c53a.png'" 
               class="image" 
             />
             <span class="font_2">{{ photo.title }}</span>
@@ -90,14 +103,14 @@
 </template>
 
 <style scoped lang="css">
-  .ml-40-5 {
+  .ml-81 {
     margin-left: 5.06rem;
   }
-  .ml-31-5 {
+  .ml-63 {
     margin-left: 3.94rem;
   }
-  .ml-13-5 {
-    margin-left: 16.8rem;
+  .ml-53 {
+    margin-left: 3.31rem;
   }
   .page {
     background-color: #000000;
@@ -125,17 +138,11 @@
     font-weight: 700;
     line-height: 1.31rem;
   }
-  .group_1 {
-    width: 19.8rem;
-  }
   .font {
     font-size: 1rem;
     font-family: "Noto Serif SC", serif;
     line-height: 0.94rem;
     color: #ffffff;
-  }
-  .group_5 {
-    width: 16.83rem;
   }
   .text_2 {
     line-height: 0.94rem;
@@ -144,10 +151,10 @@
     line-height: 0.94rem;
   }
   .text_4 {
-    line-height: 0.94rem;
+    line-height: 0.93rem;
   }
   .text_5 {
-    line-height: 0.93rem;
+    line-height: 0.92rem;
   }
   .text_6 {
     margin-right: 1.39rem;
@@ -178,64 +185,6 @@
     font-family: kaiti;
     line-height: 1rem;
   }
-  .self-center {
-    align-self: center;
-  }
-  .self-stretch {
-    align-self: stretch;
-  }
-  
-  .group_2 {
-    margin-top: 3rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  .image {
-    border-radius: 2rem;
-    height: 20rem;
-    margin-bottom: 0.84rem;
-  }
-  .section_3 {
-    padding: 2rem 10rem 2rem 10rem;
-    background-color: #383838;
-    overflow: hidden;
-  }
-  .view {
-    margin-top: 1.86rem;
-  }
-  .font_2 {
-    font-size: 1.5rem;
-    font-family: kaiti;
- 
-    color: #ffffff;
-  }
-  .align-center {
-    align-items: center;
-  }
-  .justify-center {
-    justify-content: center;
-  }
-  .group_3 {
-    padding: 3rem 0 4rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  .tabs-header {
-    background-color: #121212;
-    overflow: hidden;
-  }
-  .view_2 {
-    margin-left: 2.44rem;
-    margin-right: 2.44rem;
-  }
-  .section_4 {
-    background-color: #121212;
-    overflow: hidden;
-    width: 100%;
-  }
-
   .photo-container {
     display: flex;
     flex-wrap: wrap;

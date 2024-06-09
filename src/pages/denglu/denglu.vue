@@ -1,6 +1,7 @@
 <script setup>
   import { useRouter } from 'vue-router';
-  import { reactive, onMounted } from 'vue';
+  import { reactive } from 'vue';
+  import { useStore } from 'vuex';
   import axios from 'axios';
 
   const props = defineProps({});
@@ -9,6 +10,9 @@
     username: '',
     password: '',
   });
+
+  const store = useStore();
+  const router = useRouter();
 
   const login = async () => {
     try {
@@ -20,10 +24,12 @@
       if (response && response.data) {
         if (response.status === 200) {
           console.log(response.data.message);
-          // handle the success, e.g., show success message to the user
-          alert('登录成功！'); // 显示登录成功消息给用户
-          // Redirect to login page
-          router.push('/'); // 跳转到主页面
+          // 保存 userId 和 username 到 Vuex Store
+          store.dispatch('login', { ...response.data.user, id: response.data.userId, username: data.username });
+          // 显示登录成功消息给用户
+          alert('登录成功！');
+          // 跳转到主页面
+          router.push('/');
         } else {
           console.error('Unexpected response format:', response);
         }
@@ -31,37 +37,39 @@
     } catch (error) {
       if (error.response && error.response.data) {
         console.error('Error response data:', error.response.data);
-        // handle the error, e.g., show error message to the user
-        alert(error.response.data.message); // 显示错误消息给用户
+        // 显示错误消息给用户
+        alert(error.response.data.message);
       } else {
         console.error('Unexpected error:', error);
       }
     }
   };
 
-  const router = useRouter();
-
   function onClick() {
     router.push({ name: 'zhuye' });
   }
 
   function onClick_1() {
-    router.push({ name: 'leibiechuangjian' });
+    router.push({ name: 'denglu' });
   }
 
   function onClick_2() {
-    router.push({ name: 'zhaopianshangchuan' });
+    router.push({ name: 'leibiechuangjian' });
   }
 
   function onClick_3() {
-    router.push({ name: 'Page_group_tuxiangshengcheng' });
+    router.push({ name: 'zhaopianshangchuan' });
   }
 
   function onClick_4() {
-    router.push({ name: 'xiangcezhanshi' });
+    router.push({ name: 'Page_group_tuxiangshengcheng' });
   }
 
   function onClick_5() {
+    router.push({ name: 'xiangcezhanshi' });
+  }
+
+  function onClick_6() {
     router.push({ name: 'zhuce' });
   }
 </script>
@@ -72,17 +80,16 @@
       <div class="flex-row items-center">
         <div class="flex-col justify-start text-wrapper"><span class="text">凝时绘影</span></div>
         <div class="flex-row ml-81">
-          <span class="font text_2" @click="onClick">主页</span>
+          <span class="font text_3 ml-53" @click="onClick">主页</span>
           <div class="flex-row ml-63">
-            <span class="font text_3" @click="onClick_1">登录注册</span>
-            <span class="font text_4 ml-53" @click="onClick_2">类别创建</span>
-            <span class="font text_5 ml-53" @click="onClick_3">照片上传</span>
-            <span class="font ml-53">图像生成</span>
-            <span class="font text_6 ml-53" @click="onClick_4">相册展示</span>
+            <span class="font text_3 ml-53" @click="onClick_1">登录注册</span>
+            <span class="font text_3 ml-53" @click="onClick_2">类别创建</span>
+            <span class="font text_3 ml-53" @click="onClick_3">照片上传</span>
+            <span class="font text_3 ml-53" @click="onClick_4">图像生成</span>
+            <span class="font text_3 ml-53" @click="onClick_5">相册展示</span>
           </div>
         </div>
       </div>
-      <span class="text_7">未登录</span>
     </div>
     <div class="flex-row justify-center section section_2">
       <div class="flex-col justify-start section_3">
@@ -109,7 +116,7 @@
                 <span class="text_12">登录</span>
               </div>
             </div>
-            <span class="self-center font_1 mt-8" @click="onClick_5">没有账号？注册账号</span>
+            <span class="self-center font_1 mt-8" @click="onClick_6">没有账号？注册账号</span>
           </div>
         </div>
       </div>
@@ -201,7 +208,7 @@
   .section_3 {
     margin-bottom: -5rem;
     padding-bottom: 5rem;
-    background-image: url('https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=0ad2dcd03915d2b360277f5013fd3046.png');
+    background-image: url('https://picture.gptkong.com/20240610/00138a0565ede2419f85b2148a2030c53a.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     width: 45rem;

@@ -59,8 +59,7 @@ def register():
 @app.route('/create_category', methods=['POST'])
 def create_category():
     data = request.json
-    username = 'cmy'
-    # username = data.get('username')
+    username = data.get('username')
     name = data.get('name')
     description = data.get('description')
 
@@ -87,6 +86,7 @@ def create_category():
     cur.close()
 
     return jsonify({'message': '类别创建成功'}), 201
+
 
 
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 <script setup>
   import { useRouter } from 'vue-router';
-  import { ref, reactive, onMounted } from 'vue';
+  import { ref, reactive, computed, onMounted } from 'vue'; // 确保导入 computed
+  import { useStore } from 'vuex';
   import axios from 'axios';
 
   const data = reactive({
@@ -20,26 +21,14 @@
   const selectedCategory = ref('');
   const categories = ref([]);
   
+  const store = useStore();
   const router = useRouter();
 
-  function onClick() {
-    router.push({ name: 'zhuye' });
-  }
+  const isAuthenticated = computed(() => store?.state?.isAuthenticated || false);
+  const username = computed(() => store?.state?.username || '未登录');
 
-  function onClick_1() {
-    router.push({ name: 'denglu' });
-  }
-
-  function onClick_2() {
-    router.push({ name: 'leibiechuangjian' });
-  }
-
-  function onClick_3() {
-    router.push({ name: 'Page_group_tuxiangshengcheng' });
-  }
-
-  function onClick_4() {
-    router.push({ name: 'xiangcezhanshi' });
+  function onClick(routeName) {
+    router.push({ name: routeName });
   }
 
   function handleFileUpload(event) {
@@ -47,9 +36,16 @@
   }
 
   async function uploadPhoto() {
+    if (!isAuthenticated.value) {
+      alert('请先登录');
+      return;
+    }
+
     const formData = new FormData();
+    formData.append('username', username.value);
     formData.append('title', data.title);
-    formData.append('category_name', selectedCategory.value);
+    formData.append('category_id', selectedCategory.value);
+    console.log("category_id",selectedCategory.text)
     formData.append('file', data.file);
 
     try {
@@ -77,13 +73,16 @@
 
   onMounted(async () => {
     try {
-      const response = await axios.get('http://localhost:5003/categories');
+      const response = await axios.get('http://localhost:5003/select_categories', {
+        params: {
+          username: username.value
+        }
+      });
       categories.value = response.data;
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
   });
-
 </script>
 
 <template>
@@ -92,37 +91,39 @@
       <div class="flex-row items-center">
         <div class="flex-col justify-start text-wrapper"><span class="text">凝时绘影</span></div>
         <div class="flex-row ml-81">
-          <span class="font" @click="onClick">主页</span>
+          <span class="font text_3 ml-53" @click="onClick('zhuye')">主页</span>
           <div class="flex-row ml-63">
-            <span class="font text_2" @click="onClick_1">登录注册</span>
-            <span class="font text_3 ml-53" @click="onClick_2">类别创建</span>
-            <span class="font ml-53">照片上传</span>
-            <span class="font text_4 ml-53" @click="onClick_3">图像生成</span>
-            <span class="font text_5 ml-53" @click="onClick_4">相册展示</span>
+            <span class="font text_3 ml-53" @click="onClick('denglu')">登录注册</span>
+            <span class="font text_3 ml-53" @click="onClick('leibiechuangjian')">类别创建</span>
+            <span class="font text_3 ml-53" @click="onClick('zhaopianshangchuan')">照片上传</span>
+            <span class="font text_3 ml-53" @click="onClick('Page_group_tuxiangshengcheng')">图像生成</span>
+            <span class="font text_3 ml-53" @click="onClick('xiangcezhanshi')">相册展示</span>
           </div>
         </div>
       </div>
-      <span class="text_6">未登录</span>
+      <div>
+        <span class="font text_3 ml-53">{{ isAuthenticated ? username : '未登录' }}</span>
+      </div>
     </div>
     <div class="flex-col section section_2">
       <img
         class="image"
-        src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=8e57acb8fdb995a693fc68463f25106a.png"
+        src="https://picture.gptkong.com/20240610/00151fabba8f27475d88f0937be074b23f.png"
       />
       <div class="flex-col section_3 mt-20">
         <div class="flex-col self-center">
           <span class="self-start text_7">凝时绘影 照片上传</span>
           <span class="self-center text_8 mt-21">请上传您的照片并指定类别</span>
         </div>
-        <div class="flex-col self-stretch  justify-between items-center section group_2">
+        <div class="flex-col self-stretch justify-between items-center section group_2">
           <span class="self-start font text_9">照片标题</span>
-          <el-input class="input mt-14 " v-model="data.title"></el-input>
+          <el-input class="input mt-14" v-model="data.title"></el-input>
         </div>
         <div class="flex-col self-stretch section group_3">
           <span class="self-start justify-between font text_11">类别</span>
           <div class="flex-row justify-between items-center section_5 mt-14">
             <div class="flex-col justify-start items-end group_1">
-              <select v-model="selectedCategory" class="input mt-14">
+              <select v-model="selectedCategory" @change="handleCategoryChange" class="input mt-14">
                 <option value="" disabled>选择照片分类</option>
                 <option v-for="category in categories" :key="category.id" :value="category.id">
                   {{ category.name }}
@@ -141,7 +142,7 @@
             class="image_5 mt-14"
             src="https://picture.gptkong.com/20240609/0432d2943f603b4fca82a7995c306b43ee.png"
             @click="triggerFileInput"
-            />
+          />
         </div>
         <div @click="uploadPhoto" class="flex-col justify-start items-center self-stretch text-wrapper_2">
           <span class="text_14">上传</span>
@@ -189,12 +190,10 @@
     font-size: 1.38rem;
     font-family: "Noto Serif SC", serif;
     font-weight: 700;
-
   }
   .font {
     font-size: 1rem;
     font-family: "Noto Serif SC", serif;
-
     color: #ffffff;
   }
   .text_2 {
@@ -249,7 +248,6 @@
   }
   .group_2 {
     margin-top: 4.52rem;
-    
   }
   .text_9 {
     line-height: 0.91rem;
@@ -320,5 +318,4 @@
     font-family: "Noto Serif SC", serif;
     line-height: 1.17rem;
   }
-
 </style>

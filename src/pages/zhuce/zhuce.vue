@@ -31,10 +31,6 @@
     router.push({ name: 'xiangcezhanshi' });
   }
 
-  function onClick_6() {
-    router.push({ name: 'denglu' });
-  }
-
   const data = reactive({
     username: '',
     password: ''
@@ -76,17 +72,16 @@
       <div class="flex-row items-center">
         <div class="flex-col justify-start text-wrapper"><span class="text">凝时绘影</span></div>
         <div class="flex-row ml-81">
-          <span class="font text_2" @click="onClick">主页</span>
-          <div class="flex-row shrink-0 ml-63">
-            <span class="font" @click="onClick_1">登录注册</span>
+          <span class="font text_3 ml-53" @click="onClick">主页</span>
+          <div class="flex-row ml-63">
+            <span class="font text_3 ml-53" @click="onClick_1">登录注册</span>
             <span class="font text_3 ml-53" @click="onClick_2">类别创建</span>
-            <span class="font text_4 ml-53" @click="onClick_3">照片上传</span>
-            <span class="font text_5 ml-53" @click="onClick_4">图像生成</span>
-            <span class="font text_6 ml-53" @click="onClick_5">相册展示</span>
+            <span class="font text_3 ml-53" @click="onClick_3">照片上传</span>
+            <span class="font text_3 ml-53" @click="onClick_4">图像生成</span>
+            <span class="font text_3 ml-53" @click="onClick_5">相册展示</span>
           </div>
         </div>
       </div>
-      <span class="text_7">未登录</span>
     </div>
     <div class="flex-row justify-center section section_2">
       <div class="flex-col justify-start section_3">
@@ -113,7 +108,7 @@
                 <span class="text_12">注册</span>
               </div>
             </div>
-            <span class="self-center font text_15 mt-8" @click="onClick_6">已有账号？登录账号</span>
+            <span class="self-center font text_15 mt-8" @click="onClick_1">已有账号？登录账号</span>
           </div>
         </div>
       </div>
@@ -201,7 +196,7 @@
     width: 100%;
   }
   .section_3 {
-    background-image: url('https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=c4ea4e709bd5a285f4210fe614111fc7.png');
+    background-image: url('https://picture.gptkong.com/20240610/00144ff89bd7bc443599ad34e0916e9918.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     width: 45rem;

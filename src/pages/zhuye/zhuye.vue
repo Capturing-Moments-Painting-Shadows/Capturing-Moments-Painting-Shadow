@@ -1,31 +1,48 @@
 <script setup>
   import { useRouter } from 'vue-router';
-  import { reactive, onMounted } from 'vue';
+  import { computed } from 'vue';
+  import { useStore } from 'vuex';
 
   const props = defineProps({});
 
-  const data = reactive({});
-
   const router = useRouter();
+  const store = useStore();
+
+  // 确保 store 已经初始化并且 state 存在
+  const isAuthenticated = computed(() => store?.state?.isAuthenticated || false);
+  const username = computed(() => store?.state?.username || '未登录');
+  
+  const checkAuthAndNavigate = (routeName) => {
+    if (!isAuthenticated.value) {
+      alert('请先登录');
+      router.push({ name: 'denglu' });
+    } else {
+      router.push({ name: routeName });
+    }
+  };
 
   function onClick() {
-    router.push({ name: 'denglu' });
+    router.push({ name: 'zhuye' });
   }
 
   function onClick_1() {
-    router.push({ name: 'leibiechuangjian' });
+    router.push({ name: 'denglu' });
   }
 
   function onClick_2() {
-    router.push({ name: 'zhaopianshangchuan' });
+    checkAuthAndNavigate('leibiechuangjian');
   }
 
   function onClick_3() {
-    router.push({ name: 'Page_group_tuxiangshengcheng' });
+    checkAuthAndNavigate('zhaopianshangchuan');
   }
 
   function onClick_4() {
-    router.push({ name: 'xiangcezhanshi' });
+    checkAuthAndNavigate('Page_group_tuxiangshengcheng');
+  }
+
+  function onClick_5() {
+    checkAuthAndNavigate('xiangcezhanshi');
   }
 </script>
 
@@ -35,22 +52,26 @@
       <div class="flex-row items-center">
         <div class="flex-col justify-start text-wrapper"><span class="text">凝时绘影</span></div>
         <div class="flex-row ml-81">
-          <span class="font">主页</span>
-          <div class="flex-row shrink-0 ml-63">
-            <span class="font text_2" @click="onClick">登录注册</span>
-            <span class="font text_3 ml-53" @click="onClick_1">类别创建</span>
-            <span class="font ml-53" @click="onClick_2">照片上传</span>
-            <span class="font text_4 ml-53" @click="onClick_3">图像生成</span>
-            <span class="font text_5 ml-53" @click="onClick_4">相册展示</span>
+          <span class="font text_3 ml-53" @click="onClick">主页</span>
+          <div class="flex-row ml-63">
+            <span class="font text_3 ml-53" @click="onClick_1">登录注册</span>
+            <span class="font text_3 ml-53" @click="onClick_2">类别创建</span>
+            <span class="font text_3 ml-53" @click="onClick_3">照片上传</span>
+            <span class="font text_3 ml-53" @click="onClick_4">图像生成</span>
+            <span class="font text_3 ml-53" @click="onClick_5">相册展示</span>
           </div>
         </div>
       </div>
-      <span class="text_6">未登录</span>
+      <div>
+        <span class="font text_3 ml-53">
+          {{ isAuthenticated ? username : '未登录' }}
+        </span>
+      </div>
     </div>
     <div class="flex-col justify-start items-center relative section_3">
       <img
         class="shrink-0 image"
-        src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=757f12308eb6c00b38934507aa5bd27c.png"
+        src="https://picture.gptkong.com/20240610/00139850a2c0fa4d15be2ed0335f3a0efd.png"
       />
       <div class="flex-col justify-start items-center mask section_2">
         <div class="flex-col items-center">
