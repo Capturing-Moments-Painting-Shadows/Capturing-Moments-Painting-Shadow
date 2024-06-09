@@ -35,10 +35,14 @@
   }
 
   function onClick_3() {
-    router.push({ name: 'Page_group_tuxiangshengcheng' });
+    router.push({ name: 'zhaopianshangchuan' });
   }
 
   function onClick_4() {
+    router.push({ name: 'Page_group_tuxiangshengcheng' });
+  }
+
+  function onClick_5() {
     router.push({ name: 'xiangcezhanshi' });
   }
 
@@ -92,17 +96,16 @@
       <div class="flex-row items-center">
         <div class="flex-col justify-start text-wrapper"><span class="text">凝时绘影</span></div>
         <div class="flex-row ml-81">
-          <span class="font" @click="onClick">主页</span>
+          <span class="font text_3 ml-53" @click="onClick">主页</span>
           <div class="flex-row ml-63">
-            <span class="font text_2" @click="onClick_1">登录注册</span>
+            <span class="font text_3 ml-53" @click="onClick_1">登录注册</span>
             <span class="font text_3 ml-53" @click="onClick_2">类别创建</span>
-            <span class="font ml-53">照片上传</span>
-            <span class="font text_4 ml-53" @click="onClick_3">图像生成</span>
-            <span class="font text_5 ml-53" @click="onClick_4">相册展示</span>
+            <span class="font text_3 ml-53" @click="onClick_3">照片上传</span>
+            <span class="font text_3 ml-53" @click="onClick_4">图像生成</span>
+            <span class="font text_3 ml-53" @click="onClick_5">相册展示</span>
           </div>
         </div>
       </div>
-      <span class="text_6">未登录</span>
     </div>
     <div class="flex-col section section_2">
       <img

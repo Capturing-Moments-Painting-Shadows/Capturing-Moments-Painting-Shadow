@@ -7,22 +7,52 @@
   const props = defineProps({});
 
   const data = reactive({
-    description: ''
+    description: '',
+    annotations: []
   });
+  
   const photo_name = '银渐层';
   const router = useRouter();
 
-  const routes = [
-    'zhuye', 
-    'denglu', 
-    'leibiechuangjian', 
-    'zhaopianshangchuan',
-    'Page_group_tuxiangshengcheng', 
-    'xiangcezhanshi'
-  ];
+  function onClick() {
+    router.push({ name: 'zhuye' });
+  }
 
-  function navigateToRoute(index) {
-    router.push({ name: routes[index] });
+  function onClick_1() {
+    router.push({ name: 'denglu' });
+  }
+
+  function onClick_2() {
+    router.push({ name: 'leibiechuangjian' });
+  }
+
+  function onClick_3() {
+    router.push({ name: 'zhaopianshangchuan' });
+  }
+
+  function onClick_4() {
+    router.push({ name: 'Page_group_tuxiangshengcheng' });
+  }
+
+  function onClick_5() {
+    router.push({ name: 'xiangcezhanshi' });
+  }
+
+  async function submitAnnotation() {
+    if (data.description.trim()) {
+      const newAnnotation = data.description.trim();
+      data.annotations.push(newAnnotation);
+      data.description = '';
+
+      try {
+        // 向后端发送请求，保存注释
+        await axios.post('http://localhost:5003/save_annotation', {
+          annotation: newAnnotation
+        });
+      } catch (error) {
+        console.error('Failed to save annotation:', error);
+      }
+    }
   }
 
   function deletePhoto() {
@@ -42,13 +72,13 @@
       <div class="flex-row items-center">
         <div class="flex-col justify-start text-wrapper"><span class="text">凝时绘影</span></div>
         <div class="flex-row ml-81">
-          <span class="font" @click="navigateToRoute(0)">主页</span>
-          <div class="flex-row shrink-0 ml-63">
-            <span class="font text_2" @click="navigateToRoute(1)">登录注册</span>
-            <span class="font text_3 ml-26" @click="navigateToRoute(2)">类别创建</span>
-            <span class="font ml-26" @click="navigateToRoute(3)">照片上传</span>
-            <span class="font text_4 ml-26" @click="navigateToRoute(4)">图像生成</span>
-            <span class="font text_5 ml-26" @click="navigateToRoute(5)">相册展示</span>
+          <span class="font text_3 ml-53" @click="onClick">主页</span>
+          <div class="flex-row ml-63">
+            <span class="font text_3 ml-53" @click="onClick_1">登录注册</span>
+            <span class="font text_3 ml-53" @click="onClick_2">类别创建</span>
+            <span class="font text_3 ml-53" @click="onClick_3">照片上传</span>
+            <span class="font text_3 ml-53" @click="onClick_4">图像生成</span>
+            <span class="font text_3 ml-53" @click="onClick_5">相册展示</span>
           </div>
         </div>
       </div>
@@ -72,6 +102,12 @@
           <el-button class="button elbutton" @click="submitDescription">提交注释</el-button>
           <el-button class="delete-button" @click="deletePhoto">删除图片</el-button>
         </div>
+      </div>
+      <div v-if="data.annotations.length > 0" class="annotations mt-64">
+        <h3 class="text_8">已有注释:</h3>
+        <ul>
+          <li v-for="(annotation, index) in data.annotations" :key="index" class="text_8">{{ annotation }}</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -200,3 +236,4 @@
     width: 40rem;
   }
 </style>
+
