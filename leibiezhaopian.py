@@ -180,6 +180,33 @@ def get_photos():
 
     return jsonify(photos)
 
+@app.route('/save_annotation', methods=['POST'])
+def save_annotation():
+    data = request.get_json()
+    photo_name = data.get('photoName')
+    annotation = data.get('annotation')
+
+    if not photo_name or not annotation:
+        return jsonify({'error': 'Invalid data'}), 400
+
+    cur = mysql.connection.cursor()
+
+    # 查找照片ID
+    cur.execute("SELECT id FROM photos WHERE title = %s", (photo_name,))
+    photo = cur.fetchone()
+    
+    if not photo:
+        cur.close()
+        return jsonify({'error': 'Photo not found'}), 404
+
+    photo_id = photo['id']
+
+    # 保存注释
+    cur.execute("INSERT INTO annotations (photo_id, annotation) VALUES (%s, %s)", (photo_id, annotation))
+    mysql.connection.commit()
+    cur.close()
+
+    return jsonify({'message': 'Annotation saved successfully'}), 201
 
 if __name__ == '__main__':
     if not os.path.exists(app.config['UPLOAD_FOLDER']):

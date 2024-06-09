@@ -6,52 +6,22 @@
   const props = defineProps({});
 
   const data = reactive({
-    description: '',
-    annotations: []
+    description: ''
   });
-  
   const photo_name = '银渐层';
   const router = useRouter();
 
-  function onClick() {
-    router.push({ name: 'zhuye' });
-  }
+  const routes = [
+    'zhuye', 
+    'denglu', 
+    'leibiechuangjian', 
+    'zhaopianshangchuan',
+    'Page_group_tuxiangshengcheng', 
+    'xiangcezhanshi'
+  ];
 
-  function onClick_1() {
-    router.push({ name: 'denglu' });
-  }
-
-  function onClick_2() {
-    router.push({ name: 'leibiechuangjian' });
-  }
-
-  function onClick_3() {
-    router.push({ name: 'zhaopianshangchuan' });
-  }
-
-  function onClick_4() {
-    router.push({ name: 'Page_group_tuxiangshengcheng' });
-  }
-
-  function onClick_5() {
-    router.push({ name: 'xiangcezhanshi' });
-  }
-
-  async function submitAnnotation() {
-    if (data.description.trim()) {
-      const newAnnotation = data.description.trim();
-      data.annotations.push(newAnnotation);
-      data.description = '';
-
-      try {
-        // 向后端发送请求，保存注释
-        await axios.post('http://localhost:5003/save_annotation', {
-          annotation: newAnnotation
-        });
-      } catch (error) {
-        console.error('Failed to save annotation:', error);
-      }
-    }
+  function navigateToRoute(index) {
+    router.push({ name: routes[index] });
   }
 </script>
 
@@ -61,13 +31,13 @@
       <div class="flex-row items-center">
         <div class="flex-col justify-start text-wrapper"><span class="text">凝时绘影</span></div>
         <div class="flex-row ml-81">
-          <span class="font text_3 ml-53" @click="onClick">主页</span>
-          <div class="flex-row ml-63">
-            <span class="font text_3 ml-53" @click="onClick_1">登录注册</span>
-            <span class="font text_3 ml-53" @click="onClick_2">类别创建</span>
-            <span class="font text_3 ml-53" @click="onClick_3">照片上传</span>
-            <span class="font text_3 ml-53" @click="onClick_4">图像生成</span>
-            <span class="font text_3 ml-53" @click="onClick_5">相册展示</span>
+          <span class="font" @click="navigateToRoute(0)">主页</span>
+          <div class="flex-row shrink-0 ml-63">
+            <span class="font text_2" @click="navigateToRoute(1)">登录注册</span>
+            <span class="font text_3 ml-26" @click="navigateToRoute(2)">类别创建</span>
+            <span class="font ml-26" @click="navigateToRoute(3)">照片上传</span>
+            <span class="font text_4 ml-26" @click="navigateToRoute(4)">图像生成</span>
+            <span class="font text_5 ml-26" @click="navigateToRoute(5)">相册展示</span>
           </div>
         </div>
       </div>
@@ -80,15 +50,9 @@
       <div class="flex-row justify-between group mt-64">
         <span class="self-start text_7">{{ photo_name }}</span>
         <div class="flex-col group_2">
-          <el-input v-model="data.description" class="elinput_1" placeholder="请在此处添加照片的注释..." />
-          <el-button class="button mt-6 elbutton" @click="submitAnnotation">提交注释</el-button>
+          <el-button class="button mt-6 elbutton">提交注释</el-button>
+          <el-input v-model="data.description" class="elinput_1" placeholder="请在此处添加照片的注释..."></el-input>
         </div>
-      </div>
-      <div v-if="data.annotations.length > 0" class="annotations mt-64">
-        <h3 class="text_8">已有注释:</h3>
-        <ul>
-          <li v-for="(annotation, index) in data.annotations" :key="index" class="text_8">{{ annotation }}</li>
-        </ul>
       </div>
     </div>
   </div>
@@ -181,8 +145,7 @@
   }
   .group_2 {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    align-items: center; /* 垂直居中对齐 */
   }
   .text_8 {
     color: #ffffff;
@@ -195,21 +158,5 @@
   }
   .elbutton {
     width: 7.5rem !important;
-  }
-  .annotations {
-    margin-top: 1rem;
-  }
-  ul {
-    padding-left: 1rem;
-  }
-  li {
-    margin-bottom: 0.5rem;
-  }
-  .elinput_1 {
-    width: 300px; /* You can adjust the width as needed */
-  }
-  .button {
-    margin-top: 1rem;
-    align-self: flex-end;
   }
 </style>
