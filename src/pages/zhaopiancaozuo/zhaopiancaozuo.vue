@@ -52,7 +52,6 @@
           </div>
         </div>
       </div>
-      <span class="text_6">未登录</span>
     </div>
     <div class="flex-col section section_2">
       <div class="flex-row">
