@@ -1,26 +1,27 @@
 <script setup>
   import { useRouter } from 'vue-router';
-  import { ref, reactive, computed, onMounted } from 'vue'; // 确保导入 computed
+  import { ref, reactive, computed, onMounted } from 'vue';
   import { useStore } from 'vuex';
   import axios from 'axios';
 
   const data = reactive({
     title: '',
-    file: null,
-    categories: ''
+    file: null
   });
+
+  const AUTO_CATEGORY_ID = 'auto'; // 特殊ID用于自动分类
 
   function triggerFileInput() {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    fileInput.accept = 'image/*'; // 仅接受图片类型的文件
+    fileInput.accept = 'image/*';
     fileInput.addEventListener('change', handleFileUpload);
-    fileInput.click(); // 模拟点击文件输入框
+    fileInput.click();
   }
 
   const selectedCategory = ref('');
   const categories = ref([]);
-  
+
   const store = useStore();
   const router = useRouter();
 
@@ -41,11 +42,15 @@
       return;
     }
 
+    if (!data.file) {
+      alert('请先选择一张照片');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('username', username.value);
     formData.append('title', data.title);
     formData.append('category_id', selectedCategory.value);
-    console.log("category_id",selectedCategory.text)
     formData.append('file', data.file);
 
     try {
@@ -64,7 +69,7 @@
     } catch (error) {
       if (error.response && error.response.data) {
         console.error('Error response data:', error.response.data);
-        alert(error.response.data.message); // 显示错误消息给用户
+        alert(error.response.data.message);
       } else {
         console.error('Unexpected error:', error);
       }
@@ -79,6 +84,7 @@
         }
       });
       categories.value = response.data;
+      categories.value.push({ id: AUTO_CATEGORY_ID, name: '自动分类' });
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -89,7 +95,9 @@
   <div class="flex-col page">
     <div class="flex-row justify-between items-center header">
       <div class="flex-row items-center">
-        <div class="flex-col justify-start text-wrapper"><span class="text">凝时绘影</span></div>
+        <div class="flex-col justify-start text-wrapper">
+          <span class="text">凝时绘影</span>
+        </div>
         <div class="flex-row ml-81">
           <span class="font text_3 ml-53" @click="onClick('zhuye')">主页</span>
           <div class="flex-row ml-63">
@@ -106,10 +114,7 @@
       </div>
     </div>
     <div class="flex-col section section_2">
-      <img
-        class="image"
-        src="https://picture.gptkong.com/20240610/00151fabba8f27475d88f0937be074b23f.png"
-      />
+      <img class="image" src="https://picture.gptkong.com/20240610/00151fabba8f27475d88f0937be074b23f.png" />
       <div class="flex-col section_3 mt-20">
         <div class="flex-col self-center">
           <span class="self-start text_7">凝时绘影 照片上传</span>
@@ -123,29 +128,21 @@
           <span class="self-start justify-between font text_11">类别</span>
           <div class="flex-row justify-between items-center section_5 mt-14">
             <div class="flex-col justify-start items-end group_1">
-              <select v-model="selectedCategory" @change="handleCategoryChange" class="input mt-14">
+              <select v-model="selectedCategory" class="input mt-14">
                 <option value="" disabled>选择照片分类</option>
                 <option v-for="category in categories" :key="category.id" :value="category.id">
                   {{ category.name }}
                 </option>
               </select>
             </div>
-            <div class="flex-row items-center group_4">
-              <div class="section_6"></div>
-              <span class="font text_12 ml-14">自动分类</span>
-            </div>
           </div>
         </div>
         <div class="flex-col justify-start self-stretch group_5">
           <span class="font text_13">凝时绘影 照片上传</span>
-          <img
-            class="image_5 mt-14"
-            src="https://picture.gptkong.com/20240609/0432d2943f603b4fca82a7995c306b43ee.png"
-            @click="triggerFileInput"
-          />
+          <img class="image_5 mt-14" src="https://picture.gptkong.com/20240609/0432d2943f603b4fca82a7995c306b43ee.png" @click="triggerFileInput" />
         </div>
         <div @click="uploadPhoto" class="flex-col justify-start items-center self-stretch text-wrapper_2">
-          <span class="text_14">上传</span>
+          <span class="text_14">上传照片</span>
         </div>
       </div>
     </div>
@@ -181,7 +178,7 @@
   .text-wrapper {
     padding: 0.47rem 0 0.72rem;
     border-radius: 0.38rem;
-    cursor: pointer; /* 确保它像按钮一样可点击 */
+    cursor: pointer;
   }
   .text {
     margin-left: 0.22rem;
@@ -309,8 +306,8 @@
     padding: 0.99rem 0 1.09rem;
     background-color: #800080;
     border-radius: 0.75rem;
-    cursor: pointer; /* 确保它像按钮一样可点击 */
-    text-align: center; /* 确保文字居中 */
+    cursor: pointer;
+    text-align: center;
   }
   .text_14 {
     color: #ffffff;

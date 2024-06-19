@@ -58,51 +58,46 @@ def upload_photos():
     username = request.form['username']
     title = request.form['title']
     category_id = request.form['category_id']
-    print("category_id",category_id)
     photo = request.files['file']
 
     if not photo:
         return jsonify({'error': '文件不存在'}), 400
 
-    # 获取用户ID
     cur = mysql.connection.cursor()
     cur.execute("SELECT id FROM users WHERE username = %s", (username,))
     user = cur.fetchone()
     user_id = user['id']
-    print("userid",user_id)
 
-    # 获取类别ID
-    cur.execute("SELECT name FROM categories WHERE id = %s AND user_id = %s", (category_id, user_id,))
-    category = cur.fetchone()
+    if category_id == 'auto':
+        # 处理自动分类的逻辑
+        category_name = '自动分类'
+    else:
+        cur.execute("SELECT name FROM categories WHERE id = %s AND user_id = %s", (category_id, user_id,))
+        category = cur.fetchone()
 
-    category_name = category['name']
+        if not category:
+            return jsonify({'message': '该类别未创建'}), 400
 
-    if not category:
-        return jsonify({'message': '该类别未创建'}), 400
-    
-    # current_dir = os.path.dirname(os.path.abspath(__file__))
-    current_dir = 'static\\upload\\'
-    # 确保目录存在
+        category_name = category['name']
+
+    current_dir = 'static/upload/'
     file_path = os.path.join(current_dir, username, category_name)
     if not os.path.exists(file_path):
         os.makedirs(file_path)
     
-    # 获取文件扩展名
     file_extension = os.path.splitext(photo.filename)[1]
-    # 拼装新文件名
-    new_filename = f"{username}_{category_name}_{title}{file_extension}"    # 有重名风险
-    # 保存文件到指定目录
+    new_filename = f"{username}_{category_name}_{title}{file_extension}"
     save_path = os.path.join(file_path, new_filename)
 
-    # 保存文件
     photo.save(save_path)
 
     cur.execute("INSERT INTO photos (title, category_id, file_path) VALUES (%s, %s, %s)", 
-                (title, category_id, save_path))
+                (title, category_id if category_id != 'auto' else None, save_path))
     mysql.connection.commit()
     cur.close()
     
     return jsonify({'message': '上传成功'}), 200
+
 
 # 相册展示页面的后端：根据用户id展示相册
 @app.route('/xiangce', methods=['GET'])
