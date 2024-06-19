@@ -62,6 +62,7 @@
       if (response && response.data) {
         if (response.status === 200) {
           alert('上传成功！');
+          router.push('./xiangcezhanshi');
         } else {
           console.error('Unexpected response format:', response);
         }

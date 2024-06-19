@@ -41,7 +41,7 @@
           // 显示类别创建成功消息给用户
           alert('类别创建成功！');
           // 跳转到类别展示页面
-          router.push('/leibiechuangjian');
+          router.push('/zhaopianshangchuan');
         } else {
           console.error('Unexpected response format:', response);
         }
