@@ -12,6 +12,7 @@ const data = reactive({
 });
 
 const imageUrl = ref('');
+const generatedImageUrl = ref('');
 const filePath = ref('');
 const router = useRouter();
 const store = useStore();
@@ -82,6 +83,7 @@ const handleGenerateImage = async () => {
     });
     if (response.data.success) {
       ElMessage.success('图像生成成功');
+      generatedImageUrl.value = `http://localhost:5003/${response.data.path}`;
     } else {
       ElMessage.error('图像生成失败');
     }
@@ -140,7 +142,7 @@ const handleGenerateImage = async () => {
           </el-upload>
         </div>
         <div class="flex-col justify-center items-center text-wrapper_2 ml-14">
-          <span v-if="!generatedImageUrl" class="text_12">生成图像展示</span>
+          <span class="text_12">生成图像展示</span>
           <img v-if="generatedImageUrl" :src="generatedImageUrl" alt="generated image" class="uploaded-image"/>
         </div>
       </div>
@@ -158,149 +160,149 @@ const handleGenerateImage = async () => {
 </template>
 
 <style scoped lang="css">
-  .ml-81 {
-    margin-left: 5.06rem;
-  }
-  .ml-63 {
-    margin-left: 3.94rem;
-  }
-  .ml-53 {
-    margin-left: 3.31rem;
-  }
-  .ml-14 {
-    margin-left: 0.875rem;
-  }
-  .mt-29 {
-    margin-top: 1.81rem;
-  }
-  .page {
-    background-color: #000000;
-    width: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: 100%;
-  }
-  .header {
-    padding: 1rem 5rem;
-    background-color: #121212;
-    overflow: hidden;
-  }
-  .text-wrapper {
-    padding: 0.47rem 0 0.72rem;
-    border-radius: 0.38rem;
-    height: 2.5rem;
-  }
-  .text {
-    margin-left: 0.22rem;
-    margin-right: 0.21rem;
-    color: #ffffff;
-    font-size: 1.38rem;
-    font-family: "Noto Serif SC", serif;
-    font-weight: 700;
-    line-height: 1.31rem;
-  }
-  .font {
-    font-size: 1rem;
-    font-family: "Noto Serif SC", serif;
-    line-height: 0.93rem;
-    color: #ffffff;
-  }
-  .text_2 {
-    line-height: 0.94rem;
-  }
-  .text_3 {
-    line-height: 0.94rem;
-  }
-  .section {
-    flex-grow: 1;
-  }
-  .section_2 {
-    background-color: #121212;
-    overflow: hidden;
-    width: 100%;
-  }
-  .image {
-    width: 100vw;
-    height: 22.2222vw;
-  }
-  .section_3 {
-    padding: 1.94rem 4.31rem 1.31rem;
-  }
-  .text-wrapper_2 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1.64rem 0 1.72rem;
-    border-radius: 0.5rem;
-    background-image: url('https://picture.gptkong.com/20240610/0016a1e361fa864f1891bacf915c0792fc.png');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    width: 36.13rem;
-    height: 33.38rem;
-    cursor: pointer;
-  }
-  .text_12 {
-    color: #ffffff;
-    font-size: 2.25rem;
-    font-family: "Noto Serif SC", serif;
-    font-weight: 900;
-    line-height: 2.02rem;
-    text-align: center;
-  }
-  .section_4 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 2rem;
-  }
-  .text_8 {
-    color: #ffffff;
-    font-size: 3rem;
-    font-family: "Noto Serif SC", serif;
-    font-weight: 700;
-    line-height: 2.84rem;
-  }
-  .text_9 {
-    margin-top: 2rem;
-    color: #ffffff;
-    font-size: 1.13rem;
-    font-family: "Noto Serif SC", serif;
-    line-height: 2rem;
-  }
-  .group {
-    display: flex;
-    align-items: center;
-  }
-  .text_10 {
-    margin-right: 1rem;
-    line-height: 2rem;
-  }
-  .input {
-    width: 20rem !important;
-    margin-right: 5rem;
-    margin-bottom: 2rem;
-  }
-  .text-wrapper_5 {
-    width: 20rem !important;
-    background-color: #800080;
-    border-radius: 0.75rem;
-    text-align: center;
-    cursor: pointer;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .text_14 {
-    color: #ffffff;
-    font-size: 1.25rem;
-    font-family: "Noto Serif SC", serif;
-    line-height: 1.16rem;
-  }
-  .uploaded-image {
-    width: 36.13rem;
-    height: 33.38rem;
-    object-fit: cover;
-    border-radius: 0.5rem;
-  }
+.ml-81 {
+  margin-left: 5.06rem;
+}
+.ml-63 {
+  margin-left: 3.94rem;
+}
+.ml-53 {
+  margin-left: 3.31rem;
+}
+.ml-14 {
+  margin-left: 0.875rem;
+}
+.mt-29 {
+  margin-top: 1.81rem;
+}
+.page {
+  background-color: #000000;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+}
+.header {
+  padding: 1rem 5rem;
+  background-color: #121212;
+  overflow: hidden;
+}
+.text-wrapper {
+  padding: 0.47rem 0 0.72rem;
+  border-radius: 0.38rem;
+  height: 2.5rem;
+}
+.text {
+  margin-left: 0.22rem;
+  margin-right: 0.21rem;
+  color: #ffffff;
+  font-size: 1.38rem;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
+  line-height: 1.31rem;
+}
+.font {
+  font-size: 1rem;
+  font-family: "Noto Serif SC", serif;
+  line-height: 0.93rem;
+  color: #ffffff;
+}
+.text_2 {
+  line-height: 0.94rem;
+}
+.text_3 {
+  line-height: 0.94rem;
+}
+.section {
+  flex-grow: 1;
+}
+.section_2 {
+  background-color: #121212;
+  overflow: hidden;
+  width: 100%;
+}
+.image {
+  width: 100vw;
+  height: 22.2222vw;
+}
+.section_3 {
+  padding: 1.94rem 4.31rem 1.31rem;
+}
+.text-wrapper_2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.64rem 0 1.72rem;
+  border-radius: 0.5rem;
+  background-image: url('https://picture.gptkong.com/20240610/0016a1e361fa864f1891bacf915c0792fc.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  width: 36.13rem;
+  height: 33.38rem;
+  cursor: pointer;
+}
+.text_12 {
+  color: #ffffff;
+  font-size: 2.25rem;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 900;
+  line-height: 2.02rem;
+  text-align: center;
+}
+.section_4 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+.text_8 {
+  color: #ffffff;
+  font-size: 3rem;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
+  line-height: 2.84rem;
+}
+.text_9 {
+  margin-top: 2rem;
+  color: #ffffff;
+  font-size: 1.13rem;
+  font-family: "Noto Serif SC", serif;
+  line-height: 2rem;
+}
+.group {
+  display: flex;
+  align-items: center;
+}
+.text_10 {
+  margin-right: 1rem;
+  line-height: 2rem;
+}
+.input {
+  width: 20rem !important;
+  margin-right: 5rem;
+  margin-bottom: 2rem;
+}
+.text-wrapper_5 {
+  width: 20rem !important;
+  background-color: #800080;
+  border-radius: 0.75rem;
+  text-align: center;
+  cursor: pointer;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.text_14 {
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-family: "Noto Serif SC", serif;
+  line-height: 1.16rem;
+}
+.uploaded-image {
+  width: 36.13rem;
+  height: 33.38rem;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
 </style>
