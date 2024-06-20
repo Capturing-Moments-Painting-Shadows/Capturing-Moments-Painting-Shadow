@@ -11,6 +11,7 @@ const categories = ref([]);
 const router = useRouter();
 const store = useStore();
 
+
 // 确保 store 已经初始化并且 state 存在
 const isAuthenticated = computed(() => store?.state?.isAuthenticated || false);
 const username = computed(() => store?.state?.username || '未登录');
@@ -44,6 +45,7 @@ onMounted(async () => {
     alert('请先登录');
     router.push({ name: 'denglu' });
     return;
+
   }
 
   try {
@@ -76,11 +78,13 @@ function navigateToAlbum(category) {
           </div>
         </div>
       </div>
+
       <div>
         <span class="font text_3 ml-53">
           {{ isAuthenticated ? username : '未登录' }}
         </span>
       </div>
+
     </div>
     
     <div class="flex-col group section">
@@ -102,6 +106,7 @@ function navigateToAlbum(category) {
 </template>
 
 <style scoped lang="css">
+
 .ml-81 {
   margin-left: 5.06rem;
 }
@@ -218,5 +223,6 @@ function navigateToAlbum(category) {
   border-radius: 1rem;
   margin-top: 0.5rem; /* 增加文字与图片之间的间距 */
 }
+
 </style>
 

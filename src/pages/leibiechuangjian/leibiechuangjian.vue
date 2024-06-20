@@ -99,11 +99,13 @@
           </div>
         </div>
       </div>
+
       <div>
         <span class="font text_3 ml-53">
           {{ isAuthenticated ? username : '未登录' }}
         </span>
       </div>
+
     </div>
     <div class="flex-col items-center section section_2">
       <img

@@ -30,6 +30,7 @@
   }
 
   function onClick_2() {
+
     checkAuthAndNavigate('leibiechuangjian');
   }
 
@@ -43,6 +44,7 @@
 
   function onClick_5() {
     checkAuthAndNavigate('xiangcezhanshi');
+
   }
 </script>
 
@@ -62,11 +64,13 @@
           </div>
         </div>
       </div>
+
       <div>
         <span class="font text_3 ml-53">
           {{ isAuthenticated ? username : '未登录' }}
         </span>
       </div>
+
     </div>
     <div class="flex-col justify-start items-center relative section_3">
       <img

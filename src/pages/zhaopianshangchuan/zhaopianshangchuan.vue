@@ -25,11 +25,13 @@
   const store = useStore();
   const router = useRouter();
 
+
   const isAuthenticated = computed(() => store?.state?.isAuthenticated || false);
   const username = computed(() => store?.state?.username || '未登录');
 
   function onClick(routeName) {
     router.push({ name: routeName });
+
   }
 
   function handleFileUpload(event) {
@@ -100,6 +102,7 @@
           <span class="text">凝时绘影</span>
         </div>
         <div class="flex-row ml-81">
+
           <span class="font text_3 ml-53" @click="onClick('zhuye')">主页</span>
           <div class="flex-row ml-63">
             <span class="font text_3 ml-53" @click="onClick('denglu')">登录注册</span>
@@ -113,6 +116,7 @@
       <div>
         <span class="font text_3 ml-53">{{ isAuthenticated ? username : '未登录' }}</span>
       </div>
+
     </div>
     <div class="flex-col section section_2">
       <img class="image" src="https://picture.gptkong.com/20240610/00151fabba8f27475d88f0937be074b23f.png" />

@@ -2,8 +2,10 @@
   import { useRoute, useRouter } from 'vue-router';
   import { ref, reactive, onMounted, computed } from 'vue';
   import axios from 'axios';
+
   import { ElButton, ElInput, ElMessageBox, ElMessage } from 'element-plus';
   import { useStore } from 'vuex';
+
 
   const props = defineProps({});
 
@@ -18,6 +20,7 @@
 
   const data = reactive({
     description: '',
+
     annotations: [],
     path:''
   });
@@ -101,6 +104,7 @@
 
   function onClick_5() {
     router.push({ name: 'xiangcezhanshi' });
+
   }
 </script>
 
@@ -120,16 +124,19 @@
           </div>
         </div>
       </div>
+
       <div>
         <span class="font text_3 ml-53">
           {{ isAuthenticated ? username : '未登录' }}
         </span>
       </div>
+
     </div>
     <div class="flex-col section section_2">
       <div class="flex-row">
         <img
           class="shrink-0 image"
+
           :src="photo_path ? `http://localhost:5003/${photo_path}` : 'https://picture.gptkong.com/20240610/00138a0565ede2419f85b2148a2030c53a.png'" 
         />
         <div class="description-box">
@@ -140,17 +147,26 @@
               </li>
             </ul>
           </div>
+
         </div>
       </div>
       <div class="flex-row justify-between group mt-64">
         <div class="flex-row items-center">
+
           <span class="self-start text_7">{{photo.title}}</span>
+
         </div>
         <div class="flex-row group_2">
           <el-input v-model="data.description" class="elinput_1" placeholder="请在此处添加照片的注释..."></el-input>
           <el-button class="button elbutton" @click="submitDescription">提交注释</el-button>
           <el-button class="delete-button" @click="deletePhoto">删除图片</el-button>
         </div>
+      </div>
+      <div v-if="data.annotations.length > 0" class="annotations mt-64">
+        <h3 class="text_8">已有注释:</h3>
+        <ul>
+          <li v-for="(annotation, index) in data.annotations" :key="index" class="text_8">{{ annotation }}</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -282,3 +298,4 @@
     width: 40rem;
   }
 </style>
+

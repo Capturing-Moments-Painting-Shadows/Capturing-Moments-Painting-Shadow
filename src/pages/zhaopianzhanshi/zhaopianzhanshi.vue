@@ -10,6 +10,7 @@
   const router = useRouter();
   const store = useStore();
 
+
   const isAuthenticated = computed(() => store?.state?.isAuthenticated || false);
   const username = computed(() => store?.state?.username || '未登录');
   const category = computed(() => store?.state?.selectedCategory || null);
@@ -31,6 +32,7 @@
   function onClick_3() {
     router.push({ name: 'zhaopianshangchuan' });
   }
+
 
   function onClick_4() {
     router.push({ name: 'Page_group_tuxiangshengcheng' });
@@ -78,11 +80,13 @@
           </div>
         </div>
       </div>
+
       <div>
         <span class="font text_3 ml-53">
           {{ isAuthenticated ? username : '未登录' }}
         </span>
       </div>
+
     </div>
     <div class="flex-col group section">
       <div class="flex-col section_2">
@@ -104,6 +108,8 @@
 
 <style scoped lang="css">
   .ml-81 {
+
+
     margin-left: 5.06rem;
   }
   .ml-63 {

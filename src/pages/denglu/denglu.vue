@@ -90,6 +90,7 @@
           </div>
         </div>
       </div>
+
     </div>
     <div class="flex-row justify-center section section_2">
       <div class="flex-col justify-start section_3">
