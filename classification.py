@@ -118,7 +118,8 @@ def process_image_detection(image_path, translation_mapping, font_path="c:\\WIND
 
 if __name__ == "__main__":
     time1=time.time()
-    image_path = "D:\\腊八同学\\1大三（下）\\3软件工程\\实验\\lab2\\凝时绘影\\图片素材\\风景照\\湖光晚霞.jpg"
+    image_path = "static\upload\cmy\风景照\cmy_风景照_绿色.jpg"
+
     categories = ["风景照", "城市", "宠物", "美女", "美食", "人像"]
     translation_mapping = translate_object_list(categories)
     best_match = process_image_detection(image_path, translation_mapping)

@@ -1,18 +1,86 @@
 <script setup>
   import { useRoute, useRouter } from 'vue-router';
-  import { ref, reactive, onMounted } from 'vue';
+  import { ref, reactive, onMounted, computed } from 'vue';
   import axios from 'axios';
-  import { ElButton, ElInput } from 'element-plus';
+
+  import { ElButton, ElInput, ElMessageBox, ElMessage } from 'element-plus';
+  import { useStore } from 'vuex';
+
 
   const props = defineProps({});
 
+  const router = useRouter();
+  const store = useStore();
+
+  const isAuthenticated = computed(() => store?.state?.isAuthenticated || false);
+  const username = computed(() => store?.state?.username || '未登录');
+  const photo = computed(() => store?.state?.selectedPhoto || null)
+  console.log(photo.value.file_path)
+  const photo_path = photo.value.file_path
+
   const data = reactive({
     description: '',
-    annotations: []
+
+    annotations: [],
+    path:''
   });
-  
-  const photo_name = '银渐层';
-  const router = useRouter();
+
+  const photo_id = photo.value.id;
+
+  onMounted(async () => {
+    await fetchAnnotations();
+  });
+
+  async function fetchAnnotations() {
+    try {
+      const response = await axios.get(`http://localhost:5003/show_annotations?photo_id=${photo_id}`);
+      data.annotations = response.data;
+    } catch (error) {
+      console.error('Failed to fetch annotations:', error);
+    }
+  }
+
+  async function submitDescription() {
+    if (data.description.trim()) {
+      const newAnnotation = data.description.trim();
+      const timestamp = new Date().toISOString();
+
+      try {
+        await axios.post('http://localhost:5003/save_annotation', {
+          photo_id: photo_id,
+          annotation: newAnnotation,
+          timestamp: timestamp
+        });
+        ElMessage.success('提交成功');
+        data.description = '';
+        await fetchAnnotations();
+      } catch (error) {
+        ElMessage.error('提交注释失败');
+        console.error('Failed to save annotation:', error);
+      }
+    }
+  }
+
+  async function deletePhoto() {
+    try {
+      await ElMessageBox.confirm('确定要删除这张照片吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      });
+      const response = await axios.post('http://localhost:5003/delete_photo', { photo_id: photo_id });
+      console.log(response.status)
+      if (response.status == '200') {
+        alert('照片删除成功');
+        router.push({ name: 'zhaopianzhanshi' }); // 删除成功后跳转到照片界面
+      } else {
+        alert('照片删除失败');
+      }
+    } catch (error) {
+      alert('照片删除失败');
+      console.error('Failed to delete photo:', error);
+    }
+  }
 
   function onClick() {
     router.push({ name: 'zhuye' });
@@ -36,33 +104,7 @@
 
   function onClick_5() {
     router.push({ name: 'xiangcezhanshi' });
-  }
 
-  async function submitAnnotation() {
-    if (data.description.trim()) {
-      const newAnnotation = data.description.trim();
-      data.annotations.push(newAnnotation);
-      data.description = '';
-
-      try {
-        // 向后端发送请求，保存注释
-        await axios.post('http://localhost:5003/save_annotation', {
-          annotation: newAnnotation
-        });
-      } catch (error) {
-        console.error('Failed to save annotation:', error);
-      }
-    }
-  }
-
-  function deletePhoto() {
-    // 实现删除照片的逻辑
-    console.log('删除照片');
-  }
-
-  function submitDescription() {
-    // 实现提交注释的逻辑
-    console.log('提交注释', data.description);
   }
 </script>
 
@@ -82,20 +124,37 @@
           </div>
         </div>
       </div>
+
+      <div>
+        <span class="font text_3 ml-53">
+          {{ isAuthenticated ? username : '未登录' }}
+        </span>
+      </div>
+
     </div>
     <div class="flex-col section section_2">
       <div class="flex-row">
         <img
           class="shrink-0 image"
-          src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=45badbf1f468990ccbc2f71caefc843a.png"
+
+          :src="photo_path ? `http://localhost:5003/${photo_path}` : 'https://picture.gptkong.com/20240610/00138a0565ede2419f85b2148a2030c53a.png'" 
         />
         <div class="description-box">
-          <p class="description-text">{{ data.description }}</p>
+          <div class="annotations-box">
+            <ul>
+              <li v-for="annotation in data.annotations" :key="annotation.id">
+                {{ new Date(annotation.time).toLocaleString() }}: {{ annotation.annotation }}
+              </li>
+            </ul>
+          </div>
+
         </div>
       </div>
       <div class="flex-row justify-between group mt-64">
         <div class="flex-row items-center">
-          <span class="self-start text_7">{{ photo_name }}</span>
+
+          <span class="self-start text_7">{{photo.title}}</span>
+
         </div>
         <div class="flex-row group_2">
           <el-input v-model="data.description" class="elinput_1" placeholder="请在此处添加照片的注释..."></el-input>
@@ -112,6 +171,9 @@
     </div>
   </div>
 </template>
+
+
+
 
 <style scoped lang="css">
   .ml-81 {

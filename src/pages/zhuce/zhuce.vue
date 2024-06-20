@@ -196,7 +196,7 @@
     width: 100%;
   }
   .section_3 {
-    background-image: url('https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=c4ea4e709bd5a285f4210fe614111fc7.png');
+    background-image: url('https://picture.gptkong.com/20240610/00144ff89bd7bc443599ad34e0916e9918.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     width: 45rem;

@@ -55,7 +55,7 @@
     <div class="flex-col section section_2">
       <img
         class="image"
-        src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=2d1bd6e380591000249c4a91c42ee364.png"
+        src="https://picture.gptkong.com/20240610/001650992785d645a8aca8a6bdf6454d23.png"
       />
       <div class="flex-row justify-center section_3">
         <div class="flex-col justify-start items-center self-start text-wrapper_2">
@@ -173,7 +173,7 @@
     margin-top: 7.84rem;
     padding: 16.64rem 0 14.72rem;
     border-radius: 0.5rem;
-    background-image: url('https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=20765bce71abde4e243181559ad97632.png');
+    background-image: url('https://picture.gptkong.com/20240610/0016a1e361fa864f1891bacf915c0792fc.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     width: 36.13rem;

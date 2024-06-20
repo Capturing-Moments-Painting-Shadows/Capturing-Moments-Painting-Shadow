@@ -1,6 +1,7 @@
 <script setup>
   import { useRouter } from 'vue-router';
-  import { reactive, onMounted } from 'vue';
+  import { reactive, computed } from 'vue'; // 确保导入 computed
+  import { useStore } from 'vuex';
   import axios from 'axios';
 
   const props = defineProps({});
@@ -10,21 +11,37 @@
     description: '',
   });
 
+  const store = useStore();
+  const router = useRouter();
+
+  // 确保 store 已经初始化并且 state 存在
+  const isAuthenticated = computed(() => store?.state?.isAuthenticated || false);
+  const username = computed(() => store?.state?.username || '未登录');
+  console.log("username:",username.value)
+  console.log("isAuthenticated:",isAuthenticated.value)
+
+
   const create_category = async () => {
+    if (!isAuthenticated.value) {
+      alert('请先登录');
+      router.push('/denglu');
+      return;
+    }
+
     try {
       const response = await axios.post('http://localhost:5000/create_category', {
-        // username: data.username
         name: data.name,
-        description: data.description
+        description: data.description,
+        username: username.value,
       });
       console.log('Response:', response);
       if (response && response.data) {
         if (response.status === 201) {
           console.log(response.data.message);
-          // handle the success, e.g., show success message to the user
-          alert('类别创建成功！'); // 显示类别创建成功消息给用户
-          // Redirect to login page
-          router.push('/leibiechuangjian'); // 跳转到相册页面
+          // 显示类别创建成功消息给用户
+          alert('类别创建成功！');
+          // 跳转到类别展示页面
+          router.push('/zhaopianshangchuan');
         } else {
           console.error('Unexpected response format:', response);
         }
@@ -32,15 +49,14 @@
     } catch (error) {
       if (error.response && error.response.data) {
         console.error('Error response data:', error.response.data);
-        // handle the error, e.g., show error message to the user
-        alert(error.response.data.message); // 显示错误消息给用户
+        // 显示错误消息给用户
+        alert(error.response.data.message);
       } else {
         console.error('Unexpected error:', error);
       }
     }
   };
 
-  const router = useRouter();
 
   function onClick() {
     router.push({ name: 'zhuye' });
@@ -83,11 +99,18 @@
           </div>
         </div>
       </div>
+
+      <div>
+        <span class="font text_3 ml-53">
+          {{ isAuthenticated ? username : '未登录' }}
+        </span>
+      </div>
+
     </div>
     <div class="flex-col items-center section section_2">
       <img
         class="image"
-        src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=a8ff8364a4078f1cc470493bc322fdb4.png"
+        src="https://picture.gptkong.com/20240610/00143238563c874ddb90724bcef281d6d8.png"
       />
       <div class="flex-col mt-83">
         <div class="flex-col items-center">
@@ -109,7 +132,6 @@
     </div>
   </div>
 </template>
-
 
 <style scoped lang="css">
   .ml-81 {

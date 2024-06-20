@@ -1,12 +1,25 @@
 <script setup>
   import { useRouter } from 'vue-router';
-  import { reactive, onMounted } from 'vue';
+  import { computed } from 'vue';
+  import { useStore } from 'vuex';
 
   const props = defineProps({});
 
-  const data = reactive({});
-
   const router = useRouter();
+  const store = useStore();
+
+  // 确保 store 已经初始化并且 state 存在
+  const isAuthenticated = computed(() => store?.state?.isAuthenticated || false);
+  const username = computed(() => store?.state?.username || '未登录');
+  
+  const checkAuthAndNavigate = (routeName) => {
+    if (!isAuthenticated.value) {
+      alert('请先登录');
+      router.push({ name: 'denglu' });
+    } else {
+      router.push({ name: routeName });
+    }
+  };
 
   function onClick() {
     router.push({ name: 'zhuye' });
@@ -17,19 +30,21 @@
   }
 
   function onClick_2() {
-    router.push({ name: 'leibiechuangjian' });
+
+    checkAuthAndNavigate('leibiechuangjian');
   }
 
   function onClick_3() {
-    router.push({ name: 'zhaopianshangchuan' });
+    checkAuthAndNavigate('zhaopianshangchuan');
   }
 
   function onClick_4() {
-    router.push({ name: 'Page_group_tuxiangshengcheng' });
+    checkAuthAndNavigate('Page_group_tuxiangshengcheng');
   }
 
   function onClick_5() {
-    router.push({ name: 'xiangcezhanshi' });
+    checkAuthAndNavigate('xiangcezhanshi');
+
   }
 </script>
 
@@ -50,11 +65,17 @@
         </div>
       </div>
 
+      <div>
+        <span class="font text_3 ml-53">
+          {{ isAuthenticated ? username : '未登录' }}
+        </span>
+      </div>
+
     </div>
     <div class="flex-col justify-start items-center relative section_3">
       <img
         class="shrink-0 image"
-        src="https://ide.code.fun/api/image?token=6662d7b6a16e9e001251f0b6&name=757f12308eb6c00b38934507aa5bd27c.png"
+        src="https://picture.gptkong.com/20240610/00139850a2c0fa4d15be2ed0335f3a0efd.png"
       />
       <div class="flex-col justify-start items-center mask section_2">
         <div class="flex-col items-center">
