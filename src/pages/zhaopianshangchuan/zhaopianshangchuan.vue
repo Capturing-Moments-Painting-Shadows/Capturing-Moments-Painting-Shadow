@@ -54,6 +54,7 @@
     formData.append('title', data.title);
     formData.append('category_id', selectedCategory.value);
     formData.append('file', data.file);
+    console.log("file",data.file)
 
     try {
       const response = await axios.post('http://localhost:5003/upload_photos', formData, {
@@ -63,7 +64,8 @@
       });
       if (response && response.data) {
         if (response.status === 200) {
-          alert('上传成功！');
+          alert('上传成功！类别为：'+ response.data.category_name);
+          // console.log('response',response)
           router.push('./xiangcezhanshi');
         } else {
           console.error('Unexpected response format:', response);

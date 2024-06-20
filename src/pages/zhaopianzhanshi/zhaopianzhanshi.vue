@@ -10,12 +10,11 @@
   const router = useRouter();
   const store = useStore();
 
-
   const isAuthenticated = computed(() => store?.state?.isAuthenticated || false);
   const username = computed(() => store?.state?.username || '未登录');
   const category = computed(() => store?.state?.selectedCategory || null);
   const categoryID = computed(() => store?.state?.selectedCategory?.id || null);
-  console.log("categoryID:",categoryID)
+  console.log("categoryID:", categoryID);
 
   function onClick() {
     router.push({ name: 'zhuye' });
@@ -32,7 +31,6 @@
   function onClick_3() {
     router.push({ name: 'zhaopianshangchuan' });
   }
-
 
   function onClick_4() {
     router.push({ name: 'Page_group_tuxiangshengcheng' });
@@ -60,7 +58,7 @@
 
   function navigateToAlbum(photo) {
     store.dispatch('setSelectedPhoto', photo); // 存储选择的照片到 Vuex
-    router.push({ name: 'zhaopiancaozuo'});
+    router.push({ name: 'zhaopiancaozuo' });
   }
 </script>
 
@@ -108,8 +106,6 @@
 
 <style scoped lang="css">
   .ml-81 {
-
-
     margin-left: 5.06rem;
   }
   .ml-63 {
@@ -194,35 +190,32 @@
   .photo-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start; /* 确保不足三个的那一行靠左对齐 */
-    gap: 2rem; /* 增加项目之间的间距 */
-    margin-top: 4rem; /* 增加当前组件与上一个组件之间的距离 */
+    justify-content: flex-start;
+    gap: 2rem;
+    margin-top: 4rem;
   }
-  
   .photo-item {
-    width: calc(33.33% - 2rem); /* 确保每行最多显示三个项目，并考虑间距 */
+    width: calc(33.333% - 2rem);
     position: relative;
     cursor: pointer;
-    text-align: center; /* 文字居中 */
+    text-align: center;
   }
-  
   .image {
     width: 100%;
-    border-radius: 2rem;
-    height: auto; /* 自动调整高度以保持比例 */
+    height: 15rem; /* 固定高度 */
+    border-radius: 1rem;
     object-fit: cover;
-    display: block; /* 确保图片作为块级元素 */
+    display: block;
   }
-  
   .font_2 {
-    display: block; /* 确保文字作为块级元素 */
-    text-align: center; /* 文字居中 */
+    display: block;
+    text-align: center;
     font-size: 1.5rem;
     font-family: kaiti;
     color: #ffffff;
-    background-color: rgba(0, 0, 0, 0.5); /* 半透明背景 */
+    background-color: rgba(0, 0, 0, 0.5);
     padding: 0.5rem 1rem;
     border-radius: 1rem;
-    margin-top: 0.5rem; /* 增加文字与图片之间的间距 */
+    margin-top: 0.5rem;
   }
 </style>
