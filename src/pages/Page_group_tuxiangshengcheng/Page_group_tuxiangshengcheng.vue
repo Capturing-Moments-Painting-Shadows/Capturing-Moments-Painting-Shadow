@@ -1,7 +1,7 @@
 <script setup>
   import { useRouter } from 'vue-router';
   import { reactive, ref } from 'vue';
-  import { ElUpload } from 'element-plus';
+  import { ElUpload, ElMessage } from 'element-plus';
 
   const props = defineProps({});
 
@@ -52,6 +52,12 @@
     }
     return isJPG && isLt2M;
   };
+
+  const showUploaded = ref(false);
+
+  const handleClickUpload = () => {
+    showUploaded.value = true;
+  };
 </script>
 
 <template>
@@ -81,7 +87,7 @@
         <span class="text_9">上传图像并生成相似图片</span>
       </div>
       <div class="flex-row justify-center section_3 mt-29">
-        <div class="flex-col justify-center items-center text-wrapper_2">
+        <div class="flex-col justify-center items-center text-wrapper_2" @click="handleClickUpload">
           <el-upload
             class="upload-demo"
             action=""
@@ -89,12 +95,12 @@
             :on-success="handleSuccess"
             :before-upload="beforeUpload"
           >
-            <span class="text_12">点击选择上传</span>
+            <span v-if="!imageUrl" class="text_12">点击选择上传</span>
+            <img v-if="showUploaded && imageUrl" :src="imageUrl" alt="uploaded image" class="uploaded-image"/>
           </el-upload>
         </div>
         <div class="flex-col justify-center items-center text-wrapper_2 ml-14">
-          <span v-if="!imageUrl" class="text_12">生成图像展示</span>
-          <img v-else :src="imageUrl" alt="uploaded image" class="uploaded-image"/>
+          <span class="text_12">生成图像展示</span>
         </div>
       </div>
       <div class="flex-row justify-center mt-29">
@@ -190,6 +196,7 @@
     background-repeat: no-repeat;
     width: 36.13rem;
     height: 33.38rem;
+    cursor: pointer;
   }
   .text_12 {
     color: #ffffff;
