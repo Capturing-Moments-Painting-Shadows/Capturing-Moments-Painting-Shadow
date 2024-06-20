@@ -1,63 +1,95 @@
 <script setup>
-  import { useRouter } from 'vue-router';
-  import { reactive, ref } from 'vue';
-  import { ElUpload, ElMessage } from 'element-plus';
+import { useRouter } from 'vue-router';
+import { reactive, ref, computed } from 'vue';
+import { ElUpload, ElMessage, ElInput } from 'element-plus';
+import { useStore } from 'vuex';
+import axios from 'axios';
 
-  const props = defineProps({});
+const props = defineProps({});
 
-  const data = reactive({
-    v_model: '',
-  });
+const data = reactive({
+  v_model: '',
+});
 
-  const imageUrl = ref('');
-  const router = useRouter();
+const imageUrl = ref('');
+const filePath = ref('');
+const router = useRouter();
+const store = useStore();
 
-  function onClick() {
-    router.push({ name: 'zhuye' });
+const isAuthenticated = computed(() => store?.state?.isAuthenticated || false);
+const username = computed(() => store?.state?.username || '未登录');
+
+function onClick() {
+  router.push({ name: 'zhuye' });
+}
+
+function onClick_1() {
+  router.push({ name: 'denglu' });
+}
+
+function onClick_2() {
+  router.push({ name: 'leibiechuangjian' });
+}
+
+function onClick_3() {
+  router.push({ name: 'zhaopianshangchuan' });
+}
+
+function onClick_4() {
+  router.push({ name: 'Page_group_tuxiangshengcheng' });
+}
+
+function onClick_5() {
+  router.push({ name: 'xiangcezhanshi' });
+}
+
+const handleSuccess = (response) => {
+  imageUrl.value = `http://localhost:5003/${response.path}`;
+  filePath.value = response.path;
+};
+
+const beforeUpload = (file) => {
+  const isJPG = file.type === 'image/jpeg';
+  const isLt2M = file.size / 1024 / 1024 < 2;
+
+  if (!isJPG) {
+    ElMessage.error('上传图片只能是 JPG 格式!');
   }
-
-  function onClick_1() {
-    router.push({ name: 'denglu' });
+  if (!isLt2M) {
+    ElMessage.error('上传图片大小不能超过 2MB!');
   }
+  return isJPG && isLt2M;
+};
 
-  function onClick_2() {
-    router.push({ name: 'leibiechuangjian' });
+const showUploaded = ref(false);
+
+const handleClickUpload = () => {
+  showUploaded.value = true;
+};
+
+const handleGenerateImage = async () => {
+  if (!filePath.value || !data.v_model) {
+    ElMessage.error('请先上传图片并输入图像名称');
+    return;
   }
-
-  function onClick_3() {
-    router.push({ name: 'zhaopianshangchuan' });
-  }
-
-  function onClick_4() {
-    router.push({ name: 'Page_group_tuxiangshengcheng' });
-  }
-
-  function onClick_5() {
-    router.push({ name: 'xiangcezhanshi' });
-  }
-
-  const handleSuccess = (response, file) => {
-    imageUrl.value = URL.createObjectURL(file.raw);
-  };
-
-  const beforeUpload = (file) => {
-    const isJPG = file.type === 'image/jpeg';
-    const isLt2M = file.size / 1024 / 1024 < 2;
-
-    if (!isJPG) {
-      ElMessage.error('上传图片只能是 JPG 格式!');
+  
+  try {
+    const response = await axios.post('http://localhost:5003/generate_image', {
+      username: username.value,
+      category: '图像生成',
+      imageName: data.v_model,
+      filePath: filePath.value,
+    });
+    if (response.data.success) {
+      ElMessage.success('图像生成成功');
+    } else {
+      ElMessage.error('图像生成失败');
     }
-    if (!isLt2M) {
-      ElMessage.error('上传图片大小不能超过 2MB!');
-    }
-    return isJPG && isLt2M;
-  };
-
-  const showUploaded = ref(false);
-
-  const handleClickUpload = () => {
-    showUploaded.value = true;
-  };
+  } catch (error) {
+    console.error('Error generating image:', error);
+    ElMessage.error('图像生成失败');
+  }
+};
 </script>
 
 <template>
@@ -66,9 +98,9 @@
       <div class="flex-row items-center">
         <div class="flex-col justify-start text-wrapper"><span class="text">凝时绘影</span></div>
         <div class="flex-row ml-81">
-          <span class="font text_2" @click="onClick">主页</span>
+          <span class="font text_3 ml-53" @click="onClick">主页</span>
           <div class="flex-row ml-63">
-            <span class="font text_3" @click="onClick_1">登录注册</span>
+            <span class="font text_3 ml-53" @click="onClick_1">登录注册</span>
             <span class="font text_3 ml-53" @click="onClick_2">类别创建</span>
             <span class="font text_3 ml-53" @click="onClick_3">照片上传</span>
             <span class="font text_3 ml-53" @click="onClick_4">图像生成</span>
@@ -76,7 +108,14 @@
           </div>
         </div>
       </div>
+
+      <div>
+        <span class="font text_3 ml-53">
+          {{ isAuthenticated ? username : '未登录' }}
+        </span>
+      </div>
     </div>
+
     <div class="flex-col section section_2">
       <img
         class="image"
@@ -90,17 +129,19 @@
         <div class="flex-col justify-center items-center text-wrapper_2" @click="handleClickUpload">
           <el-upload
             class="upload-demo"
-            action=""
+            action="http://localhost:5003/upload_temp"
             :show-file-list="false"
             :on-success="handleSuccess"
             :before-upload="beforeUpload"
+            name="file"
           >
             <span v-if="!imageUrl" class="text_12">点击选择上传</span>
             <img v-if="showUploaded && imageUrl" :src="imageUrl" alt="uploaded image" class="uploaded-image"/>
           </el-upload>
         </div>
         <div class="flex-col justify-center items-center text-wrapper_2 ml-14">
-          <span class="text_12">生成图像展示</span>
+          <span v-if="!generatedImageUrl" class="text_12">生成图像展示</span>
+          <img v-if="generatedImageUrl" :src="generatedImageUrl" alt="generated image" class="uploaded-image"/>
         </div>
       </div>
       <div class="flex-row justify-center mt-29">
@@ -108,7 +149,7 @@
           <span class="self-start font text_10">图像名称</span>
           <el-input class="input elinput" v-model="data.v_model"></el-input>
         </div>
-        <div class="flex-col justify-start items-center text-wrapper_5 ml-14" @click="onClick_5">
+        <div class="flex-col justify-start items-center text-wrapper_5 ml-14" @click="handleGenerateImage">
           <span class="text_14">生成图像</span>
         </div>
       </div>

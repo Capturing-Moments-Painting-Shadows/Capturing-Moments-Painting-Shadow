@@ -6,9 +6,11 @@ import os
 from flask_cors import CORS
 from classification import process_image_detection
 from classification import translate_object_list
+from generate import create_variation
 
 app = Flask(__name__)
 CORS(app)  # 启用 CORS，允许所有来源的请求
+mysql = MySQL(app)
 
 # MySQL configurations
 app.config['MYSQL_USER'] = 'root'
@@ -17,8 +19,84 @@ app.config['MYSQL_DB'] = 'photo_management'
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['UPLOAD_FOLDER'] = 'uploads\\'
+app.config['UPLOAD_FOLD'] = 'static/upload/temp'
+app.config['GENERATED_FOLDER'] = 'static/upload/generated'
 
-mysql = MySQL(app)
+if not os.path.exists(app.config['UPLOAD_FOLD']):
+    os.makedirs(app.config['UPLOAD_FOLD'])
+
+if not os.path.exists(app.config['GENERATED_FOLDER']):
+    os.makedirs(app.config['GENERATED_FOLDER'])
+
+@app.route('/upload_temp', methods=['POST'])
+def upload_temp():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+
+    if file and file.filename.endswith('.jpg'):
+        filename = file.filename
+        file_path = os.path.join(app.config['UPLOAD_FOLD'], filename)
+        file.save(file_path)
+        return jsonify({'message': 'File uploaded successfully', 'path': file_path}), 200
+
+    return jsonify({'error': 'Invalid file type'}), 400
+
+@app.route('/generate_image', methods=['POST'])
+def generate_image():
+    data = request.get_json()
+    username = data.get('username')
+    category = data.get('category')
+    image_name = data.get('imageName')
+    file_path = data.get('filePath')
+
+    if not all([username, category, image_name, file_path]):
+        return jsonify({'success': False, 'message': 'Missing data'}), 400
+
+    # 检查用户是否存在
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT id FROM users WHERE username = %s", (username,))
+    user = cur.fetchone()
+    if not user:
+        return jsonify({'success': False, 'message': 'User not found'}), 404
+    user_id = user['id']
+
+    # 检查类别是否存在
+    cur.execute("SELECT id FROM categories WHERE user_id = %s AND name = %s", (user_id, category))
+    category_row = cur.fetchone()
+
+    if not category_row:
+        # 如果类别不存在，创建新类别
+        cur.execute("INSERT INTO categories (user_id, name) VALUES (%s, %s)", (user_id, category))
+        mysql.connection.commit()
+        cur.execute("SELECT id FROM categories WHERE user_id = %s AND name = %s", (user_id, category))
+        category_row = cur.fetchone()
+
+    category_id = category_row['id']
+
+    # 生成图像的保存路径
+    user_folder = os.path.join(app.config['GENERATED_FOLDER'], username)
+    category_folder = os.path.join(user_folder, category)
+    if not os.path.exists(category_folder):
+        os.makedirs(category_folder)
+
+    file_extension = os.path.splitext(file_path)[1]
+    new_filename = f"{username}_{category}_{image_name}{file_extension}"
+    new_file_path = os.path.join(category_folder, new_filename)
+
+    generated_image_path = create_variation(image_path=file_path, output_dir=new_file_path)
+
+    # 将图像信息存储到数据库
+    cur.execute("INSERT INTO photos (title, category_id, file_path) VALUES (%s, %s, %s)",
+                (image_name, category_id, new_file_path))
+    mysql.connection.commit()
+    cur.close()
+
+    return jsonify({'success': True, 'message': 'Image generated successfully', 'path': generated_image_path}), 200
 
 # 照片上传页面的类别选择：根据用户id做展示
 @app.route('/select_categories', methods=['GET'])
@@ -101,10 +179,23 @@ def upload_photos():
 
         cur.execute("SELECT id FROM categories WHERE user_id = %s AND name = %s", (user_id, category_name))
         category = cur.fetchone()
-        if not category:
-            return jsonify({'message': '自动分类失败，未找到匹配的类别'}), 400
 
-        category_id = category['id']
+        if not category:
+            # 如果没有找到匹配的类别，检查是否存在名为 "其他" 的类别
+            cur.execute("SELECT id FROM categories WHERE user_id = %s AND name = %s", (user_id, '其他'))
+            other_category = cur.fetchone()
+
+            if not other_category:
+                # 如果 "其他" 类别不存在，则创建一个新的 "其他" 类别
+                cur.execute("INSERT INTO categories (name, user_id) VALUES (%s, %s)", ('其他', user_id))
+                mysql.connection.commit()
+                cur.execute("SELECT id FROM categories WHERE user_id = %s AND name = %s", (user_id, '其他'))
+                other_category = cur.fetchone()
+
+            category_id = other_category['id']
+            category_name = '其他'
+        else:
+            category_id = category['id']
 
         final_dir = os.path.join(current_dir, username, category_name)
         if not os.path.exists(final_dir):
@@ -153,7 +244,6 @@ def upload_photos():
     cur.close()
 
     return jsonify({'message': '上传成功', 'path': final_path, 'category_name': category_name}), 200
-
 
 # 相册展示页面的后端：根据用户id展示相册
 @app.route('/xiangce', methods=['GET'])
