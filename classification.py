@@ -57,7 +57,10 @@ def translate_object_list(object_list):
         return {}
 
 def process_image_detection(image_path, translation_mapping, font_path="c:\\WINDOWS\\Fonts\\MSYHL.TTC", font_size=15, desired_size=(256, 256), threshold=0.15):
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    # device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = 'cpu'
+    # 清理未使用的变量和缓存
+    torch.cuda.empty_cache()
     
     # 打开图像
     image = Image.open(image_path)
@@ -116,15 +119,13 @@ def process_image_detection(image_path, translation_mapping, font_path="c:\\WIND
         print(f"No match found for categories: {list(translation_mapping.keys())}")
         return None, None, None
 
-if __name__ == "__main__":
-    time1=time.time()
-    image_path = "D:\\腊八同学\\1大三（下）\\3软件工程\\实验\\lab2\\凝时绘影\\图片素材\\美女\\刘亦菲.jpg"
 
-    categories = ["风景照", "城市", "宠物", "美女", "美食", "人像"]
-    translation_mapping = translate_object_list(categories)
-    best_match = process_image_detection(image_path, translation_mapping)
-    if best_match:
-        category, box, score = best_match
-        print(f"Best match: {category}, Box: {box}, Score: {score}")
-    time2=time.time()
-    print('Time cost:',time2-time1)
+
+#     categories = ["风景照", "城市", "宠物", "美女", "美食", "人像"]
+#     translation_mapping = translate_object_list(categories)
+#     best_match = process_image_detection(image_path, translation_mapping)
+#     if best_match:
+#         category, box, score = best_match
+#         print(f"Best match: {category}, Box: {box}, Score: {score}")
+#     time2=time.time()
+#     print('Time cost:',time2-time1)
