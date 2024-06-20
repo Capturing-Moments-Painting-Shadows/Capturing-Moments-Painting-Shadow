@@ -1,6 +1,7 @@
 <script setup>
   import { useRouter } from 'vue-router';
-  import { reactive, onMounted } from 'vue';
+  import { reactive, ref } from 'vue';
+  import { ElUpload } from 'element-plus';
 
   const props = defineProps({});
 
@@ -8,6 +9,7 @@
     v_model: '',
   });
 
+  const imageUrl = ref('');
   const router = useRouter();
 
   function onClick() {
@@ -33,6 +35,23 @@
   function onClick_5() {
     router.push({ name: 'xiangcezhanshi' });
   }
+
+  const handleSuccess = (response, file) => {
+    imageUrl.value = URL.createObjectURL(file.raw);
+  };
+
+  const beforeUpload = (file) => {
+    const isJPG = file.type === 'image/jpeg';
+    const isLt2M = file.size / 1024 / 1024 < 2;
+
+    if (!isJPG) {
+      ElMessage.error('上传图片只能是 JPG 格式!');
+    }
+    if (!isLt2M) {
+      ElMessage.error('上传图片大小不能超过 2MB!');
+    }
+    return isJPG && isLt2M;
+  };
 </script>
 
 <template>
@@ -57,30 +76,34 @@
         class="image"
         src="https://picture.gptkong.com/20240610/001650992785d645a8aca8a6bdf6454d23.png"
       />
-      <div class="flex-row justify-center section_3">
-        <div class="flex-col justify-start items-center self-start text-wrapper_2">
-          <span class="text_12">拖入照片或点击选择</span>
+      <div class="flex-col items-center justify-center section_4">
+        <span class="text_8">图像生成</span>
+        <span class="text_9">上传图像并生成相似图片</span>
+      </div>
+      <div class="flex-row justify-center section_3 mt-29">
+        <div class="flex-col justify-center items-center text-wrapper_2">
+          <el-upload
+            class="upload-demo"
+            action=""
+            :show-file-list="false"
+            :on-success="handleSuccess"
+            :before-upload="beforeUpload"
+          >
+            <span class="text_12">点击选择上传</span>
+          </el-upload>
         </div>
-        <div class="flex-col section_4 ml-14">
-          <div class="flex-col items-center">
-            <span class="text_8">图像生成</span>
-            <span class="text_9 mt-29">请输入图像相关信息</span>
-          </div>
-          <div class="flex-col group">
-            <span class="self-start font text_10">图像名称</span>
-            <el-input class="input mt-14 elinput" v-model="data.v_model"></el-input>
-          </div>
-          <div class="flex-col group_2">
-            <span class="self-start font text_1">图像生成</span>
-            <div class="flex-col self-stretch mt-14">
-              <div class="flex-col justify-start items-start text-wrapper_4">
-                <span class="font_2 text_13">请输入生成图像的描述词</span>
-              </div>
-              <div class="flex-col justify-start items-center text-wrapper_5 mt-16" @click="onClick_5">
-                <span class="text_14">生成图像</span>
-              </div>
-            </div>
-          </div>
+        <div class="flex-col justify-center items-center text-wrapper_2 ml-14">
+          <span v-if="!imageUrl" class="text_12">生成图像展示</span>
+          <img v-else :src="imageUrl" alt="uploaded image" class="uploaded-image"/>
+        </div>
+      </div>
+      <div class="flex-row justify-center mt-29">
+        <div class="flex-row group">
+          <span class="self-start font text_10">图像名称</span>
+          <el-input class="input elinput" v-model="data.v_model"></el-input>
+        </div>
+        <div class="flex-col justify-start items-center text-wrapper_5 ml-14" @click="onClick_5">
+          <span class="text_14">生成图像</span>
         </div>
       </div>
     </div>
@@ -96,6 +119,9 @@
   }
   .ml-53 {
     margin-left: 3.31rem;
+  }
+  .ml-14 {
+    margin-left: 0.875rem;
   }
   .mt-29 {
     margin-top: 1.81rem;
@@ -138,22 +164,6 @@
   .text_3 {
     line-height: 0.94rem;
   }
-  .text_4 {
-    line-height: 0.94rem;
-  }
-  .text_5 {
-    line-height: 0.94rem;
-  }
-  .text_6 {
-    line-height: 0.92rem;
-  }
-  .text_7 {
-    margin-right: 1.39rem;
-    color: #fcfcfc;
-    font-size: 1.25rem;
-    font-family: "Noto Serif SC", serif;
-    line-height: 1.11rem;
-  }
   .section {
     flex-grow: 1;
   }
@@ -170,8 +180,10 @@
     padding: 1.94rem 4.31rem 1.31rem;
   }
   .text-wrapper_2 {
-    margin-top: 7.84rem;
-    padding: 16.64rem 0 14.72rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.64rem 0 1.72rem;
     border-radius: 0.5rem;
     background-image: url('https://picture.gptkong.com/20240610/0016a1e361fa864f1891bacf915c0792fc.png');
     background-size: 100% 100%;
@@ -185,13 +197,13 @@
     font-family: "Noto Serif SC", serif;
     font-weight: 900;
     line-height: 2.02rem;
+    text-align: center;
   }
   .section_4 {
-    padding: 5.19rem 5.56rem 6.5rem;
-    background-color: #121212;
-    overflow: hidden;
-    width: 44.38rem;
-    height: 46.31rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
   }
   .text_8 {
     color: #ffffff;
@@ -201,47 +213,35 @@
     line-height: 2.84rem;
   }
   .text_9 {
+    margin-top: 2rem;
     color: #ffffff;
     font-size: 1.13rem;
     font-family: "Noto Serif SC", serif;
-    line-height: 1.05rem;
+    line-height: 2rem;
   }
   .group {
-    margin-top: 4.21rem;
+    display: flex;
+    align-items: center;
   }
   .text_10 {
-    margin-left: 0.098rem;
-    line-height: 0.93rem;
+    margin-right: 1rem;
+    line-height: 2rem;
   }
   .input {
-    align-self: stretch;
-  }
-  .font_2 {
-    font-size: 1rem;
-    font-family: "Noto Serif SC", serif;
-    line-height: 0.93rem;
-    color: #505050;
-  }
-  .group_2 {
-    margin-top: 2.74rem;
-  }
-  .text_1 {
-    margin-left: 0.098rem;
-  }
-  .text-wrapper_4 {
-    padding: 0.99rem 0 9.33rem;
-    background-color: #ffffff1a;
-    border-radius: 0.75rem;
-    width: 33.25rem;
-  }
-  .text_13 {
-    margin-left: 0.8rem;
+    width: 20rem !important;
+    margin-right: 5rem;
+    margin-bottom: 2rem;
   }
   .text-wrapper_5 {
-    padding: 0.99rem 0 1.1rem;
+    width: 20rem !important;
     background-color: #800080;
     border-radius: 0.75rem;
-    width: 33.25rem;
+    text-align: center;
+    cursor: pointer;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .text_14 {
     color: #ffffff;
@@ -249,7 +249,10 @@
     font-family: "Noto Serif SC", serif;
     line-height: 1.16rem;
   }
-  .elinput {
-    width: 33.25rem !important;
+  .uploaded-image {
+    width: 36.13rem;
+    height: 33.38rem;
+    object-fit: cover;
+    border-radius: 0.5rem;
   }
 </style>
