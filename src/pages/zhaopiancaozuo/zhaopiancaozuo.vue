@@ -162,12 +162,6 @@
           <el-button class="delete-button" @click="deletePhoto">删除图片</el-button>
         </div>
       </div>
-      <div v-if="data.annotations.length > 0" class="annotations mt-64">
-        <h3 class="text_8">已有注释:</h3>
-        <ul>
-          <li v-for="(annotation, index) in data.annotations" :key="index" class="text_8">{{ annotation }}</li>
-        </ul>
-      </div>
     </div>
   </div>
 </template>

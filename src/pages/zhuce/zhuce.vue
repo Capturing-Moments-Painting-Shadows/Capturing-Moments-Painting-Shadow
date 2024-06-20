@@ -38,7 +38,7 @@
 
   const register = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/register', {
+      const response = await axios.post('http://localhost:5003/register', {
         username: data.username,
         password: data.password
       });

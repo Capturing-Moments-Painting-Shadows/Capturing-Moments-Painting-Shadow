@@ -142,7 +142,7 @@ const handleGenerateImage = async () => {
           </el-upload>
         </div>
         <div class="flex-col justify-center items-center text-wrapper_2 ml-14">
-          <span class="text_12">生成图像展示</span>
+          <span v-if="!generatedImageUrl"  class="text_12">生成图像展示</span>
           <img v-if="generatedImageUrl" :src="generatedImageUrl" alt="generated image" class="uploaded-image"/>
         </div>
       </div>

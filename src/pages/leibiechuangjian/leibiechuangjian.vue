@@ -29,7 +29,7 @@
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/create_category', {
+      const response = await axios.post('http://localhost:5003/create_category', {
         name: data.name,
         description: data.description,
         username: username.value,

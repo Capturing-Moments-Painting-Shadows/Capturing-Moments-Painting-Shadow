@@ -28,6 +28,80 @@ if not os.path.exists(app.config['UPLOAD_FOLD']):
 if not os.path.exists(app.config['GENERATED_FOLDER']):
     os.makedirs(app.config['GENERATED_FOLDER'])
 
+# 处理登录请求
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+
+    if not username or not password:
+        return jsonify({'message': '用户名和密码不能为空'}), 400
+
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM users WHERE username = %s", (username,))
+    user = cur.fetchone()
+    cur.close()
+
+    if user and user['password'] == password:
+        return jsonify({'message': '登录成功'}), 200
+    else:
+        return jsonify({'message': '用户名或密码错误'}), 400
+    
+# 处理注册请求
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+
+    if not username or not password:
+        return jsonify({'message': '用户名和密码不能为空'}), 400
+
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM users WHERE username = %s", (username,))
+    user = cur.fetchone()
+    if user:
+        return jsonify({'message': '用户名已存在'}), 400
+
+    cur.execute("INSERT INTO users (username, password) VALUES (%s, %s)", (username, password))
+    mysql.connection.commit()
+    cur.close()
+
+    return jsonify({'message': '注册成功'}), 201
+
+# 处理创建类别请求
+@app.route('/create_category', methods=['POST'])
+def create_category():
+    data = request.json
+    username = data.get('username')
+    name = data.get('name')
+    description = data.get('description')
+
+    if not name or not description:
+        return jsonify({'message': '类别名称和描述不能为空'}), 400
+
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT id FROM users WHERE username = %s", (username,))
+    user = cur.fetchone()
+
+    if not user:
+        return jsonify({'message': '用户不存在'}), 400
+
+    user_id = user['id']
+    # 检查是否存在相同用户的相同类型名称的类别
+    cur.execute("SELECT * FROM categories WHERE user_id = %s AND name = %s", (user_id, name))
+    duplicate_category = cur.fetchone()
+    if duplicate_category:
+        return jsonify({'message': '类别已存在'}), 400
+
+    cur.execute("INSERT INTO categories (name, user_id, description) VALUES (%s, %s, %s)", 
+                (name, user_id, description))
+    mysql.connection.commit()
+    cur.close()
+
+    return jsonify({'message': '类别创建成功'}), 201
+
 @app.route('/upload_temp', methods=['POST'])
 def upload_temp():
     if 'file' not in request.files:
